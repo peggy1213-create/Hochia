@@ -5,24 +5,13 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { loadSettings } from '@/lib/userStore';
 import { findCounty } from '@/lib/regions';
-import { menusForCounty } from '@/lib/schoolData';
+import { weekFor } from '@/lib/schoolData';
 
-const WD_ZH = ['一', '二', '三', '四', '五', '六', '日'];
+const WD_ZH = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
 const WD_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-/** Monday-based week, shifted by `offset` weeks from today. */
-function weekDays(offset: number) {
-  const base = new Date();
-  base.setDate(base.getDate() + offset * 7);
-  const dow = (base.getDay() + 6) % 7; // Monday = 0
-  const monday = new Date(base);
-  monday.setDate(base.getDate() - dow);
-  const days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    return { idx: i, date: d.getDate(), weekend: i >= 5, full: d };
-  });
-  return days;
+function toIso(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 export default function TodayClient() {
@@ -30,26 +19,24 @@ export default function TodayClient() {
   const locale = useLocale();
   const [countyZh, setCountyZh] = useState<string | undefined>(undefined);
   const [ready, setReady] = useState(false);
-  const [weekOffset, setWeekOffset] = useState(0);
-  const [sel, setSel] = useState(0);
+  const [iso, setIso] = useState('');
 
   useEffect(() => {
     setCountyZh(loadSettings().region?.countyZh);
-    setSel((new Date().getDay() + 6) % 7); // default to today's weekday
+    setIso(toIso(new Date()));
     setReady(true);
   }, []);
 
-  if (!ready) return null;
+  if (!ready || !iso) return null;
 
+  const picked = new Date(iso + 'T00:00:00');
+  const wdIdx = (picked.getDay() + 6) % 7; // Monday = 0
   const wd = locale === 'en' ? WD_EN : WD_ZH;
-  const days = weekDays(weekOffset);
-  const selected = days[sel];
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
-  const city = menusForCounty(countyZh);
-  const weekend = selected?.weekend;
-  const selDate = selected.full;
-  const dateLabel = `${selDate.getFullYear()}/${selDate.getMonth() + 1}/${selDate.getDate()}（${wd[sel]}）`;
+  const week = weekFor(countyZh);
+  const weekend = wdIdx >= 5;
+  const day = week && !weekend ? week[wdIdx] : null;
 
   const pill = (
     <Link
@@ -65,44 +52,22 @@ export default function TodayClient() {
     </Link>
   );
 
-  const arrowBtn = (dir: -1 | 1, disabled: boolean) => (
-    <button
-      type="button"
-      aria-label={dir === -1 ? t('prevWeek') : t('nextWeek')}
-      disabled={disabled}
-      onClick={() => setWeekOffset((o) => (dir === 1 ? Math.min(0, o + 1) : o - 1))}
-      className="flex h-[58px] w-8 flex-none items-center justify-center rounded-xl border border-border bg-surface text-lg font-bold text-primary disabled:text-border"
-    >
-      {dir === -1 ? '‹' : '›'}
-    </button>
-  );
-
-  const dateSwitcher = (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center gap-1.5">
-        {arrowBtn(-1, false)}
-        <div className="flex flex-1 gap-1.5 overflow-x-auto pb-0.5">
-          {days.map((d) => {
-            const active = d.idx === sel;
-            return (
-              <button
-                key={d.idx}
-                type="button"
-                aria-pressed={active}
-                onClick={() => setSel(d.idx)}
-                className={`flex min-h-[58px] min-w-[46px] flex-none flex-col items-center justify-center gap-0.5 rounded-xl border text-xs ${
-                  active ? 'border-primary bg-primary text-white' : 'border-border bg-surface text-muted'
-                }`}
-              >
-                <span>{wd[d.idx]}</span>
-                <b className={`text-lg tabular-nums ${active ? 'text-white' : 'text-ink'}`}>{d.date}</b>
-              </button>
-            );
-          })}
-        </div>
-        {arrowBtn(1, weekOffset >= 0)}
-      </div>
-      <p className="text-xs text-muted">{dateLabel}</p>
+  const calendar = (
+    <div className="flex items-center gap-2">
+      <label className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 font-bold text-ink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M3 9h18M8 3v4M16 3v4" />
+        </svg>
+        <input
+          type="date"
+          value={iso}
+          onChange={(e) => e.target.value && setIso(e.target.value)}
+          aria-label={t('pickDate')}
+          className="bg-transparent font-bold text-ink outline-none"
+        />
+      </label>
+      <span className="rounded-full bg-tint px-2.5 py-1 text-sm font-semibold">{wd[wdIdx]}</span>
     </div>
   );
 
@@ -113,11 +78,11 @@ export default function TodayClient() {
     </Link>
   );
 
-  if (!city) {
+  if (!week) {
     return (
       <div className="flex flex-col gap-3">
         {pill}
-        {dateSwitcher}
+        {calendar}
         <Link href="/region" className="card block p-6 text-center text-muted">
           {t('cityOnly')} <span className="font-bold text-primary">{t('changeCity')}</span>
         </Link>
@@ -125,11 +90,11 @@ export default function TodayClient() {
     );
   }
 
-  if (weekend) {
+  if (weekend || !day) {
     return (
       <div className="flex flex-col gap-3">
         {pill}
-        {dateSwitcher}
+        {calendar}
         <div className="card p-4">
           <div className="eyebrow">{t('noSchool')}</div>
           <p className="mt-2 text-muted">{t('noSchoolBody')}</p>
@@ -142,7 +107,7 @@ export default function TodayClient() {
   return (
     <div className="flex flex-col gap-3">
       {pill}
-      {dateSwitcher}
+      {calendar}
 
       <div className="card overflow-hidden">
         <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
@@ -151,8 +116,8 @@ export default function TodayClient() {
             {t('pickTitle')} · {t('pickWhy')}
           </div>
           <div className="mt-3 flex flex-col gap-2">
-            {city.pick.map((n) => {
-              const d = city.dishes[n];
+            {day.pick.map((n) => {
+              const d = day.dishes[n];
               if (!d) return null;
               return (
                 <div key={n} className="flex items-baseline gap-2.5">
@@ -171,10 +136,10 @@ export default function TodayClient() {
       <h2 className="text-lg font-extrabold">{t('nearby')}</h2>
       <div className="card p-4">
         <ul className="flex flex-col divide-y divide-border">
-          {city.schools.map((s, i) => (
+          {day.schools.map((s, i) => (
             <li key={i}>
               <Link
-                href={`/school/${encodeURIComponent(countyZh!)}/${i}`}
+                href={`/school/${encodeURIComponent(countyZh!)}/${wdIdx}/${i}`}
                 className="flex items-center gap-3 py-3.5"
               >
                 <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-tint text-primary">

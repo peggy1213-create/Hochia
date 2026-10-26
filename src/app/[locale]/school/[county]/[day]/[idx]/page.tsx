@@ -1,19 +1,19 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
-import { menusForCounty } from '@/lib/schoolData';
+import { dayMenu } from '@/lib/schoolData';
 
 export default async function SchoolPage({
   params,
 }: {
-  params: { locale: string; county: string; idx: string };
+  params: { locale: string; county: string; day: string; idx: string };
 }) {
   setRequestLocale(params.locale);
   const t = await getTranslations('today');
   const county = decodeURIComponent(params.county);
-  const city = menusForCounty(county);
-  const school = city?.schools[Number(params.idx)];
-  if (!city || !school) notFound();
+  const menu = dayMenu(county, Number(params.day));
+  const school = menu?.schools[Number(params.idx)];
+  if (!menu || !school) notFound();
 
   return (
     <div className="flex flex-col gap-3 px-4 py-4">
@@ -22,13 +22,13 @@ export default async function SchoolPage({
       </Link>
       <h1 className="text-xl font-extrabold">{school.name}</h1>
       <p className="text-muted">
-        {school.district} · {city.date} · {t('schoolMenu')}
+        {school.district} · {menu.date} · {t('schoolMenu')}
       </p>
 
       <div className="card p-4">
         <ul className="flex flex-col divide-y divide-border">
           {school.menu.map((n, i) => {
-            const d = city.dishes[n];
+            const d = menu.dishes[n];
             if (!d) return null;
             const ings = d.ings
               .map((ig) => (ig.cert ? `${ig.name} ·${ig.cert}` : ig.name))

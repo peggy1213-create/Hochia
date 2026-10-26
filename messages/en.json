@@ -21,8 +21,7 @@
     "toSeason": "See what's in season",
     "noSchool": "No school lunch on weekends",
     "noSchoolBody": "Here's what's in season instead. Menus return on weekdays.",
-    "prevWeek": "Previous week",
-    "nextWeek": "Next week"
+    "pickDate": "Choose a date"
   },
   "inSeason": {
     "title": "In Season",
