@@ -20,7 +20,9 @@
     "changeCity": "選擇縣市",
     "toSeason": "看本月盛產",
     "noSchool": "週末沒有學校午餐",
-    "noSchoolBody": "先看看本月盛產，平日再回來看菜單。"
+    "noSchoolBody": "先看看本月盛產，平日再回來看菜單。",
+    "prevWeek": "上一週",
+    "nextWeek": "下一週"
   },
   "inSeason": {
     "title": "本月盛產",

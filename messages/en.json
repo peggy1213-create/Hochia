@@ -20,7 +20,9 @@
     "changeCity": "Choose a city",
     "toSeason": "See what's in season",
     "noSchool": "No school lunch on weekends",
-    "noSchoolBody": "Here's what's in season instead. Menus return on weekdays."
+    "noSchoolBody": "Here's what's in season instead. Menus return on weekdays.",
+    "prevWeek": "Previous week",
+    "nextWeek": "Next week"
   },
   "inSeason": {
     "title": "In Season",
