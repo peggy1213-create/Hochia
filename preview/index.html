@@ -224,11 +224,11 @@ const T = {
   'zh-TW':{
     tagline:'好食',
     tabs:{today:'今天',season:'本月盛產',week:'本週食材',me:'我的'},
-    sample:'示範資料：本月盛產為農業部真實開放資料（每月盛產農產品產地）；學校菜單仍為模擬，待串接校園食材登錄平臺。',
+    sample:'示範資料：本月盛產為農業部開放資料；學校午餐為校園食材登錄平臺真實資料（臺北市松山區，2025/05/13）。',
     todayEyebrow:'大安區 · 臺北市',
     todayPickTitle:'今天的一餐',
     foodGroups:{veg:'蔬菜',pro:'豆魚蛋肉',grain:'全榖雜糧'},
-    pickWhy:'附近 6 所學校最常見的組合',
+    pickWhy:'附近學校最常見的組合',
     toSeason:'看本月盛產 →',
     nearby:'附近學校午餐',
     cookAtHome:'在家煮',
@@ -297,11 +297,11 @@ const T = {
   'en':{
     tagline:'Good Eats',
     tabs:{today:'Today',season:'In Season',week:'This Week',me:'Me'},
-    sample:'Sample data: In-Season produce is real open data from the Ministry of Agriculture; school menus are still mocked, pending the School Catering platform.',
+    sample:'Sample data: In-Season produce is real Ministry of Agriculture open data; school lunches are real data from the School Catering platform (Taipei Songshan, 2025/05/13). English dish names fall back to Chinese.',
     todayEyebrow:"Da'an Dist. · Taipei City",
     todayPickTitle:"Today's meal",
     foodGroups:{veg:'Vegetables',pro:'Protein',grain:'Grains'},
-    pickWhy:'Most common combo across 6 nearby schools',
+    pickWhy:'Most common combo at nearby schools',
     toSeason:"See what's in season →",
     nearby:'Nearby school lunches',
     cookAtHome:'Cook at home',
@@ -370,45 +370,47 @@ const T = {
 };
 
 /* ---------------- sample data (bilingual) ---------------- */
-const L=(o)=>o[state.lang==='en'?'en':'zh'];  // data objects key on zh/en; UI lang is zh-TW/en
+const L=(o)=>(state.lang==='en'?(o.en??o.zh):o.zh);  // en falls back to zh when no translation
 const DAYS=[
   {zh:'一',en:'Mon',d:'20',wd:1},{zh:'二',en:'Tue',d:'21',wd:2},
   {zh:'三',en:'Wed',d:'22',wd:3},{zh:'四',en:'Thu',d:'23',wd:4},
   {zh:'五',en:'Fri',d:'24',wd:5},{zh:'六',en:'Sat',d:'25',wd:6},{zh:'日',en:'Sun',d:'26',wd:0}
 ];
+const MENU_DATE='2025/05/13';
 const DISHES={
-  sanbei:{nm:{zh:'三杯雞',en:'Three-cup chicken'},grp:'pro',
-    ings:[{nm:{zh:'雞腿肉',en:'Chicken thigh'},amt:{1:'180 g',base:180,unit:'g'},cert:{zh:'產銷履歷',en:'Traceable'}},
-          {nm:{zh:'九層塔',en:'Thai basil'},amt:{base:15,unit:'g'}},
-          {nm:{zh:'老薑',en:'Ginger'},amt:{base:20,unit:'g'}},
-          {nm:{zh:'蒜頭',en:'Garlic'},amt:{base:3,unit:'瓣',unitEn:'cloves'}},
-          {nm:{zh:'麻油',en:'Sesame oil'},amt:{base:15,unit:'ml'}},
-          {nm:{zh:'醬油',en:'Soy sauce'},amt:{base:20,unit:'ml'}}],
-    steps:{zh:['麻油小火爆香薑片與蒜頭至微焦。','下雞肉中火煎到表面上色。','加醬油、米酒與少許糖，燜煮約 8 分鐘。','收汁後關火，拌入九層塔即可。'],
-           en:['Gently fry ginger and garlic in sesame oil until fragrant.','Add chicken, brown over medium heat.','Add soy sauce, rice wine and a little sugar; simmer ~8 min.','Reduce, turn off heat, fold in basil.']}},
-  shicai:{nm:{zh:'炒青江菜',en:'Stir-fried bok choy'},grp:'veg',
-    ings:[{nm:{zh:'青江菜',en:'Bok choy'},amt:{base:200,unit:'g'},cert:{zh:'有機',en:'Organic'}},
-          {nm:{zh:'蒜末',en:'Minced garlic'},amt:{base:5,unit:'g'}},
-          {nm:{zh:'食用油',en:'Cooking oil'},amt:{base:10,unit:'ml'}}],
-    steps:{zh:['青江菜洗淨切段。','熱油爆香蒜末，下菜快炒。','加少許鹽調味，炒至翠綠即起鍋。'],
-           en:['Wash and cut bok choy.','Fry garlic in hot oil, add greens and stir-fry fast.','Season with a little salt; serve while bright green.']}},
-  miso:{nm:{zh:'味噌豆腐湯',en:'Miso tofu soup'},grp:'pro',
-    ings:[{nm:{zh:'嫩豆腐',en:'Soft tofu'},amt:{base:150,unit:'g'},cert:{zh:'非基改',en:'Non-GMO'}},
-          {nm:{zh:'味噌',en:'Miso paste'},amt:{base:30,unit:'g'}},
-          {nm:{zh:'海帶芽',en:'Wakame'},amt:{base:5,unit:'g'}}],
-    steps:{zh:['水滾後下豆腐與海帶芽。','味噌先用少量熱湯化開再倒回。','微滾即關火，避免煮沸。'],
-           en:['Bring water to a boil; add tofu and wakame.','Dissolve miso in a little hot broth, stir back in.','Heat until just steaming; do not boil.']}},
-  rice:{nm:{zh:'糙米飯',en:'Brown rice'},grp:'grain',
-    ings:[{nm:{zh:'糙米',en:'Brown rice'},amt:{base:80,unit:'g'},cert:{zh:'CAS',en:'CAS'}}],
-    steps:{zh:['糙米洗淨浸泡 30 分鐘。','米水比約 1:1.2，電鍋煮熟後燜 10 分鐘。'],
-           en:['Rinse and soak brown rice 30 min.','Cook at ~1:1.2 rice-to-water; rest 10 min.']}},
+  '白米飯':{nm:{zh:'白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},
+  '青江菜':{nm:{zh:'青江菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'青江菜'},cert:{zh:'產銷履歷'}}]},
+  '綠豆粉圓':{nm:{zh:'綠豆粉圓'},cat:{zh:'湯品'},ings:[{nm:{zh:'綠豆'},cert:null},{nm:{zh:'粉圓'},cert:null}]},
+  '奶香咖哩豬肉':{nm:{zh:'奶香咖哩豬肉'},cat:{zh:'主菜'},ings:[{nm:{zh:'豬前腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'紅蘿蔔'},cert:{zh:'產銷履歷'}}]},
+  '彩繪三絲':{nm:{zh:'彩繪三絲'},cat:{zh:'副菜'},ings:[{nm:{zh:'紅蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'芹菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'海帶絲'},cert:null},{nm:{zh:'豆干絲'},cert:null}]},
+  '鹽燒雞肉':{nm:{zh:'鹽燒雞肉'},cat:{zh:'副菜'},ings:[{nm:{zh:'帶皮雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'杏鮑菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大頭菜'},cert:{zh:'溯源農糧產品'}}]},
+  '古早味雞翅':{nm:{zh:'古早味雞翅'},cat:{zh:'主菜'},ings:[{nm:{zh:'三節翅'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
+  '海芽雞湯':{nm:{zh:'海芽雞湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'三節翅'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'裙帶菜'},cert:null},{nm:{zh:'嫩薑'},cert:null}]},
+  '金榜油飯':{nm:{zh:'金榜油飯'},cat:{zh:'主食'},ings:[{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'紅蔥頭'},cert:null},{nm:{zh:'乾香菇'},cert:null},{nm:{zh:'白粳糯米'},cert:null},{nm:{zh:'蝦米'},cert:null}]},
+  '滷蛋豆干':{nm:{zh:'滷蛋豆干'},cat:{zh:'副菜'},ings:[{nm:{zh:'黑豆干'},cert:null},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'雞水煮蛋'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'嫩薑'},cert:null}]},
+  '田園時蔬':{nm:{zh:'田園時蔬'},cat:{zh:'副菜'},ings:[{nm:{zh:'花胡瓜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍青花菜'},cert:{zh:'產銷履歷'}},{nm:{zh:'甜玉米'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍花椰菜'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'大蒜'},cert:null}]},
+  '薏仁飯':{nm:{zh:'薏仁飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'洋薏仁'},cert:null}]},
+  '蔥味魚條':{nm:{zh:'蔥味魚條'},cat:{zh:'副菜'},ings:[{nm:{zh:'虱目魚(去皮)'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'蔥'},cert:null}]},
+  '美式洋蔥炒豬':{nm:{zh:'美式洋蔥炒豬'},cat:{zh:'主菜'},ings:[{nm:{zh:'甜椒(黃皮)'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'洋蔥'},cert:{zh:'產銷履歷'}},{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
+  '油菜':{nm:{zh:'油菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'油菜'},cert:{zh:'產銷履歷'}}]},
+  '白飯':{nm:{zh:'白飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},
+  '山藥排骨湯':{nm:{zh:'山藥排骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'山藥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'龍骨'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'枸杞'},cert:null}]},
+  '柴魚蒸蛋':{nm:{zh:'柴魚蒸蛋'},cat:{zh:'副菜'},ings:[{nm:{zh:'柴魚片'},cert:null},{nm:{zh:'液蛋(加工)'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
+  '金菇什錦羹':{nm:{zh:'金菇什錦羹'},cat:{zh:'副菜'},ings:[{nm:{zh:'大白菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'金針菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆皮'},cert:null}]},
+  '豆豉燒雞':{nm:{zh:'豆豉燒雞'},cat:{zh:'主菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆豉'},cert:null},{nm:{zh:'雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
+  '有機白米飯':{nm:{zh:'有機白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'臺灣有機農產品'}}]},
+  '有機小松菜':{nm:{zh:'有機小松菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'小松菜'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'蒜仁'},cert:null},{nm:{zh:'老薑'},cert:null}]},
+  '黃芽大骨湯':{nm:{zh:'黃芽大骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'黃豆芽'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大骨'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
+  '滷蛋油腐':{nm:{zh:'滷蛋油腐'},cat:{zh:'副菜'},ings:[{nm:{zh:'雞蛋'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'油豆腐'},cert:null}]},
+  '蔥油雞':{nm:{zh:'蔥油雞'},cat:{zh:'主菜'},ings:[{nm:{zh:'雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'青蔥'},cert:null},{nm:{zh:'骨腿'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蠔菇'},cert:{zh:'臺灣有機農產品'}}]},
 };
-const TODAY_PICK=['sanbei','shicai','miso','rice'];
+const TODAY_PICK=['金榜油飯','奶香咖哩豬肉','青江菜','海芽雞湯'];
 const SCHOOLS=[
-  {nm:{zh:'大安國小',en:"Da'an Elementary"},dist:{zh:'大安區 · 0.4 km',en:"Da'an · 0.4 km"},menu:['sanbei','shicai','miso','rice']},
-  {nm:{zh:'幸安國小',en:'Xingan Elementary'},dist:{zh:'大安區 · 0.8 km',en:"Da'an · 0.8 km"},menu:['sanbei','shicai','miso','rice']},
-  {nm:{zh:'仁愛國中',en:"Ren'ai Junior High"},dist:{zh:'大安區 · 1.1 km',en:"Da'an · 1.1 km"},menu:['shicai','miso','rice','sanbei']},
-  {nm:{zh:'新生國小',en:'Xinsheng Elementary'},dist:{zh:'中正區 · 1.6 km',en:'Zhongzheng · 1.6 km'},menu:['sanbei','rice','shicai','miso']},
+  {nm:{zh:'松山區介壽國中'},dist:{zh:'松山區'},menu:['白米飯','青江菜','綠豆粉圓','奶香咖哩豬肉','彩繪三絲','鹽燒雞肉','古早味雞翅','海芽雞湯','金榜油飯','滷蛋豆干','田園時蔬']},
+  {nm:{zh:'松山區民生國中'},dist:{zh:'松山區'},menu:['薏仁飯','青江菜','蔥味魚條','海芽雞湯','美式洋蔥炒豬','田園時蔬']},
+  {nm:{zh:'松山區中山國中'},dist:{zh:'松山區'},menu:['油菜','白飯','山藥排骨湯','柴魚蒸蛋','金菇什錦羹','豆豉燒雞']},
+  {nm:{zh:'松山區敦化國中'},dist:{zh:'松山區'},menu:['白米飯','青江菜','綠豆粉圓','奶香咖哩豬肉','彩繪三絲','鹽燒雞肉','古早味雞翅','海芽雞湯','金榜油飯','滷蛋豆干','田園時蔬']},
+  {nm:{zh:'松山區松山國小'},dist:{zh:'松山區'},menu:['有機白米飯','有機小松菜','黃芽大骨湯','滷蛋油腐','蔥油雞']},
 ];
 /* Real 農業部 data: all 35 edible crops with an October peak, from moa_061.json
    (UnitId=061; excludes 花卉 flowers and 茶 teas). Peak = contiguous month ranges. */
@@ -509,13 +511,12 @@ function renderToday(){
       <p class="muted" style="margin:8px 0 14px">${t.weekendBody}</p>
       <button class="btn primary block" data-go="season">${t.toSeason}</button></div>`;
   }else{
-    const lines=TODAY_PICK.map(id=>{const d=DISHES[id];return `<div class="dishline"><span class="dot"></span><span class="nm">${L(d.nm)}</span>${groupTag(d.grp)}</div>`;}).join('');
+    const lines=TODAY_PICK.map(id=>{const d=DISHES[id];if(!d)return '';return `<div class="dishline"><span class="dot"></span><span class="nm">${L(d.nm)}</span><span class="tag">${L(d.cat)}</span></div>`;}).join('');
     pick=`<div class="card pick">
       <div class="pbar"></div>
       <div class="pick-body">
         <div class="eyebrow">${t.todayPickTitle} · ${t.pickWhy}</div>
         <div class="dishgrid">${lines}</div>
-        <div class="tags">${groupTag('veg')}${groupTag('pro')}${groupTag('grain')}</div>
       </div></div>`;
   }
   const schools=SCHOOLS.map((s,i)=>`<button class="li" data-school="${i}">
@@ -606,9 +607,12 @@ function renderDetail(){
   const back=`<div class="detail-top"><button class="back">${IC.back}${t.tabs[state.tab]}</button></div>`;
   if(d.type==='school'){
     const s=SCHOOLS[d.id];
-    const dishes=s.menu.map(id=>{const dd=DISHES[id];return `<div class="li" style="cursor:default">
-      <span class="ic">${IC.pot}</span><span class="tx"><b>${L(dd.nm)}</b><span>${t.foodGroups[dd.grp]}</span></span></div>`;}).join('');
-    return `${back}<h2 class="sec">${L(s.nm)}</h2><p class="muted" style="margin:0">${L(s.dist)} · ${t.schoolMenu}</p>
+    const dishes=s.menu.map(id=>{const dd=DISHES[id];if(!dd)return '';
+      const ings=dd.ings.map(ig=>`${L(ig.nm)}${ig.cert?` <span class="muted">·${L(ig.cert)}</span>`:''}`).join('、');
+      return `<div class="li" style="cursor:default;align-items:flex-start">
+        <span class="ic">${IC.pot}</span>
+        <span class="tx"><b>${L(dd.nm)} <span class="badge corn" style="font-size:10px">${L(dd.cat)}</span></b><span>${ings||'—'}</span></span></div>`;}).join('');
+    return `${back}<h2 class="sec">${L(s.nm)}</h2><p class="muted" style="margin:0">${L(s.dist)} · ${MENU_DATE} · ${t.schoolMenu}</p>
       <div class="card pad"><div class="list">${dishes}</div></div>`;
   }
   if(d.type==='crop'){
