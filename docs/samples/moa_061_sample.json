@@ -1,0 +1,362 @@
+[
+  {
+    "type": "水果",
+    "month": "9",
+    "crop": "芒果",
+    "variety": "凱特",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "9",
+    "crop": "芒果",
+    "variety": "凱特",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "9",
+    "crop": "芒果",
+    "variety": "凱特",
+    "county": "臺南市",
+    "town": "南化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "9",
+    "crop": "芒果",
+    "variety": "凱特",
+    "county": "高雄市",
+    "town": "六龜區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "新化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "新化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "新化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "大內區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "大內區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "臺南市",
+    "town": "大內區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "三地門鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "三地門鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "三地門鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "來義鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "來義鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "來義鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "4",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "新埤鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "新埤鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "在來種",
+    "county": "屏東縣",
+    "town": "新埤鄉",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "7",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "玉井區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "7",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "楠西區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "南化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "南化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "7",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "南化區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "官田區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "官田區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "7",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "官田區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "5",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "大內區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "6",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "大內區",
+    "picture_url": ""
+  },
+  {
+    "type": "水果",
+    "month": "7",
+    "crop": "芒果",
+    "variety": "愛文、聖心、金煌",
+    "county": "臺南市",
+    "town": "大內區",
+    "picture_url": ""
+  }
+]

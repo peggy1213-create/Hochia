@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hochia 好食</title>
+<style>
+  /* minimal reset mirroring the Artifact publish skeleton */
+  :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  html,body{margin:0}
+  body{font:15px/1.5 system-ui,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>Hochia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: a single centred phone column (max 430px). Sticky wordmark header,
+     scrolling content, in-column bottom tab bar. Palette B "菜市場 Market", light-only by brand. */
+  :root{
+    --ground:#F3F6EE; --surface:#FFFFFF; --tint:#E3EBDA; --border:#D3DDC8;
+    --ink:#1C2A21; --muted:#56655A; --primary:#2F6B3F; --primary-hover:#214D2D;
+    --secondary:#E07A2E; --accent:#F2D16B;
+    --backdrop:#DDE6D2; --shadow:0 1px 2px rgba(28,42,33,.06),0 6px 16px rgba(28,42,33,.07);
+    color-scheme:light;
+    --fs-xs:12px; --fs-sm:13px; --fs-base:15px; --fs-lg:17px; --fs-xl:21px; --fs-2xl:27px;
+    --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;font-family:var(--sans);background:var(--backdrop);color:var(--ink);
+    font-size:var(--fs-base);line-height:1.5;-webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;
+  }
+  button{font-family:inherit;color:inherit;cursor:pointer}
+  .app{
+    width:100%;max-width:430px;min-height:100%;background:var(--ground);
+    display:flex;flex-direction:column;position:relative;
+    box-shadow:0 0 0 1px var(--border);overflow:hidden;
+  }
+  /* ---- header ---- */
+  header{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--primary);
+    color:#fff;display:flex;align-items:center;justify-content:space-between;
+    padding:12px max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+  }
+  .wordmark{font-weight:900;font-size:var(--fs-xl);letter-spacing:.5px}
+  .wordmark small{font-weight:500;opacity:.8;font-size:var(--fs-xs);letter-spacing:1px;margin-left:6px}
+  .lang{
+    display:flex;background:rgba(255,255,255,.16);border-radius:999px;padding:3px;gap:2px;
+  }
+  .lang button{
+    border:0;background:transparent;color:#fff;font-size:var(--fs-xs);font-weight:700;
+    padding:7px 11px;border-radius:999px;min-height:34px;opacity:.75;
+  }
+  .lang button[aria-pressed="true"]{background:#fff;color:var(--primary);opacity:1}
+  /* ---- content ---- */
+  main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  .wrap{padding:16px max(16px,env(safe-area-inset-left,0px)) 24px;padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+  .sample-flag{
+    display:flex;align-items:center;gap:8px;background:var(--accent);color:var(--ink);
+    font-size:var(--fs-xs);font-weight:600;padding:8px 12px;border-radius:10px;line-height:1.35;
+  }
+  .eyebrow{font-size:var(--fs-xs);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+  .loc{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:8px 10px 8px 12px;min-height:42px;font-weight:700;color:var(--ink);box-shadow:var(--shadow)}
+  .loc .pin{color:var(--primary);display:flex}
+  .loc .chev{color:var(--muted);display:flex}
+  h2.sec{font-size:var(--fs-lg);font-weight:800;margin:4px 0 0;text-wrap:balance}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+  .card.pad{padding:16px}
+  .muted{color:var(--muted)}
+  .row{display:flex;align-items:center;gap:10px}
+  .between{justify-content:space-between}
+  /* date switcher */
+  .days{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+  .days::-webkit-scrollbar{display:none}
+  .day{
+    flex:0 0 auto;min-width:48px;min-height:58px;border:1px solid var(--border);background:var(--surface);
+    border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    font-size:var(--fs-xs);color:var(--muted);
+  }
+  .day b{font-size:var(--fs-lg);color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
+  .day[aria-pressed="true"]{background:var(--primary);border-color:var(--primary)}
+  .day[aria-pressed="true"],.day[aria-pressed="true"] b{color:#fff}
+  /* pick card */
+  .pick{position:relative;overflow:hidden}
+  .pick .pbar{height:6px;background:linear-gradient(90deg,var(--primary),var(--secondary))}
+  .pick-body{padding:16px;display:flex;flex-direction:column;gap:12px}
+  .dishgrid{display:flex;flex-direction:column;gap:9px}
+  .dishline{display:flex;align-items:baseline;gap:9px}
+  .dishline .dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--secondary);transform:translateY(-1px)}
+  .dishline .nm{font-weight:700}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:var(--fs-xs);font-weight:600;padding:5px 10px;border-radius:999px;background:var(--tint);color:var(--ink)}
+  .tag.veg{background:#E6F0E0}.tag.pro{background:#F6E6D6}.tag.grain{background:#F6EFCF}
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:12px;border:1px solid transparent;font-weight:700;font-size:var(--fs-base)}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.primary:hover{background:var(--primary-hover)}
+  .btn.ghost{background:var(--surface);border-color:var(--border);color:var(--ink)}
+  .btn.block{width:100%}
+  .btn.sm{min-height:40px;padding:0 13px;font-size:var(--fs-sm)}
+  /* list items */
+  .list{display:flex;flex-direction:column;gap:0}
+  .li{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--border);text-align:left;background:none;border-left:0;border-right:0;border-top:0;width:100%}
+  .li:last-child{border-bottom:0}
+  .li .ic{flex:0 0 auto;width:38px;height:38px;border-radius:10px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--primary)}
+  .li .tx{flex:1;min-width:0}
+  .li .tx b{display:block;font-weight:700}
+  .li .tx span{color:var(--muted);font-size:var(--fs-sm)}
+  .chev{color:var(--muted);flex:0 0 auto}
+  .badge{font-size:11px;font-weight:800;letter-spacing:.3px;padding:3px 8px;border-radius:6px;background:var(--secondary);color:var(--ink)}
+  .badge.corn{background:var(--accent)}
+  /* filter chips */
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-weight:600;font-size:var(--fs-sm);color:var(--muted)}
+  .chip[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:#fff}
+  /* hero ingredient */
+  .hero{padding:18px;background:linear-gradient(135deg,#2F6B3F,#3C864F);color:#fff;border-radius:16px}
+  .hero .k{font-size:var(--fs-2xl);font-weight:900;line-height:1.1}
+  .hero .s{opacity:.9;margin-top:4px}
+  .hero .hbadge{display:inline-block;margin-top:12px;background:var(--accent);color:var(--ink);font-weight:800;font-size:var(--fs-xs);padding:5px 10px;border-radius:999px}
+  /* stepper + checklist (在家煮) */
+  .stepper{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .stepper button{width:46px;height:46px;border:0;background:var(--surface);font-size:21px;font-weight:700;color:var(--primary)}
+  .stepper button:disabled{color:var(--border)}
+  .stepper .val{min-width:52px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+  .check{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--border);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+  .check:last-child{border-bottom:0}
+  .box{flex:0 0 auto;width:24px;height:24px;border-radius:7px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;color:#fff}
+  .check[aria-pressed="true"] .box{background:var(--primary);border-color:var(--primary)}
+  .check[aria-pressed="true"] .amt,.check[aria-pressed="true"] .nm{color:var(--muted)}
+  .check .nm{flex:1;font-weight:600}.check .amt{color:var(--muted);font-variant-numeric:tabular-nums}
+  .steps{counter-reset:s;display:flex;flex-direction:column;gap:14px;padding:0;margin:0;list-style:none}
+  .steps li{display:flex;gap:12px}
+  .steps li::before{counter-increment:s;content:counter(s);flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:var(--fs-sm)}
+  .notice{font-size:var(--fs-sm);background:var(--tint);border-radius:10px;padding:10px 12px;color:var(--ink);display:flex;gap:8px}
+  .ai-note{display:flex;align-items:center;gap:8px;font-size:var(--fs-xs);font-weight:700;color:var(--secondary)}
+  /* empty states */
+  .empty{text-align:center;color:var(--muted);padding:34px 10px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .empty svg{color:var(--border)}
+  /* Me rows */
+  .merow{display:flex;align-items:center;gap:12px;padding:15px 4px;border-bottom:1px solid var(--border);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+  .merow:last-child{border-bottom:0}
+  .merow .ic{color:var(--primary)}
+  .seg{display:flex;gap:6px;background:var(--tint);padding:4px;border-radius:12px}
+  .seg button{flex:1;min-height:38px;border:0;background:transparent;border-radius:9px;font-weight:700;font-size:var(--fs-sm);color:var(--muted)}
+  .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  /* detail header */
+  .detail-top{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+  .back{display:inline-flex;align-items:center;gap:4px;min-height:40px;border:0;background:none;color:var(--primary);font-weight:700;padding:0 4px 0 0;margin-left:-4px}
+  /* bottom tabs */
+  nav{
+    position:sticky;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--border);
+    display:flex;padding:6px max(4px,env(safe-area-inset-left,0px));
+    padding-right:max(4px,env(safe-area-inset-right,0px));
+    padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+  }
+  .tab{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;min-height:52px;color:var(--muted);font-size:11px;font-weight:600;border-radius:12px}
+  .tab[aria-pressed="true"]{color:var(--primary)}
+  .tab svg{width:24px;height:24px}
+  /* first-run overlay */
+  .overlay{position:absolute;inset:0;z-index:40;background:rgba(28,42,33,.5);display:flex;align-items:flex-end}
+  .sheet{background:var(--ground);width:100%;border-radius:22px 22px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;max-height:92%;overflow-y:auto}
+  .sheet h3{margin:0;font-size:var(--fs-2xl);font-weight:900;text-wrap:balance}
+  .sheet .lead{color:var(--muted);margin:-8px 0 0}
+  .optgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{min-height:52px;border:1px solid var(--border);background:var(--surface);border-radius:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 10px}
+  .opt[aria-pressed="true"]{border-color:var(--primary);background:#E6F0E0;color:var(--primary-hover)}
+  .dots{display:flex;gap:6px;justify-content:center}
+  .dots i{width:7px;height:7px;border-radius:50%;background:var(--border)}
+  .dots i.on{background:var(--primary);width:18px;border-radius:999px}
+  .skip{align-self:center;background:none;border:0;color:var(--muted);font-weight:600;min-height:40px;font-size:var(--fs-sm)}
+  .toast{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-weight:600;font-size:var(--fs-sm);z-index:30;box-shadow:var(--shadow);opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:2px solid var(--secondary);outline-offset:2px;border-radius:8px}
+</style>
+
+<div class="app" id="app">
+  <header>
+    <div class="wordmark">Hochia <small id="tagline"></small></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="zh-TW" aria-pressed="true">中文</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+  <main id="main"><div class="wrap" id="view"></div></main>
+  <nav id="nav" aria-label="Sections"></nav>
+  <div class="toast" id="toast"></div>
+  <div class="overlay" id="overlay" hidden></div>
+</div>
+
+<script>
+"use strict";
+/* ---------------- icons (stroke, no emoji) ---------------- */
+const S = (p,extra="")=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ${extra}>${p}</svg>`;
+const IC = {
+  today:S('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>'),
+  season:S('<path d="M11 20A7 7 0 0 1 4 13c4 0 7 3 7 7Z"/><path d="M13 20a7 7 0 0 1 7-9c0 4-3 9-7 9Z"/><path d="M11 20v-5"/>'),
+  week:S('<path d="M3 9h18l-1.5 10.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5Z"/><path d="M3 9l2.5-5h13L21 9"/><path d="M9 13v4M15 13v4"/>'),
+  me:S('<circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/>'),
+  chev:S('<path d="m9 6 6 6-6 6"/>','width="20" height="20"'),
+  back:S('<path d="m15 6-6 6 6 6"/>','width="22" height="22"'),
+  check:S('<path d="m5 12 5 5L20 6"/>','width="15" height="15"'),
+  leaf:S('<path d="M11 20A7 7 0 0 1 4 13c4 0 7 3 7 7Z"/><path d="M13 20a7 7 0 0 1 7-9c0 4-3 9-7 9Z"/>','width="20" height="20"'),
+  school:S('<path d="M3 10l9-5 9 5-9 5Z"/><path d="M7 12v5c0 1 2 2 5 2s5-1 5-2v-5"/>','width="20" height="20"'),
+  bag:S('<path d="M6 8h12l-1 11a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 19Z"/><path d="M9 8a3 3 0 0 1 6 0"/>','width="20" height="20"'),
+  heart:S('<path d="M12 20s-7-4.4-7-9.5A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.5C19 15.6 12 20 12 20Z"/>','width="20" height="20"'),
+  pot:S('<path d="M4 10h16v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5Z"/><path d="M4 10 3 8M20 10l1-2M9 7s-.5-1 .5-2M14 7s-.5-1 .5-2"/>','width="20" height="20"'),
+  settings:S('<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.3l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2.3-1.3L13.6 2h-3.2L10 5.2a7 7 0 0 0-2.3 1.3l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.3l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2.3 1.3L10 22h3.2l.4-3.2a7 7 0 0 0 2.3-1.3l2.3 1 2-3.4-2-1.5A7 7 0 0 0 19 12Z"/>','width="20" height="20"'),
+  info:S('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>','width="20" height="20"'),
+  clock:S('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>','width="20" height="20"'),
+  plus:S('<path d="M12 5v14M5 12h14"/>','width="18" height="18"'),
+  pin:S('<path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z"/><circle cx="12" cy="11" r="2.2"/>','width="18" height="18"'),
+};
+
+/* ---------------- i18n chrome ---------------- */
+const T = {
+  'zh-TW':{
+    tagline:'好食',
+    tabs:{today:'今天',season:'本月盛產',week:'本週食材',me:'我的'},
+    sample:'示範資料：本月盛產為農業部真實開放資料（每月盛產農產品產地）；學校菜單仍為模擬，待串接校園食材登錄平臺。',
+    todayEyebrow:'大安區 · 臺北市',
+    todayPickTitle:'今天的一餐',
+    foodGroups:{veg:'蔬菜',pro:'豆魚蛋肉',grain:'全榖雜糧'},
+    pickWhy:'附近 6 所學校最常見的組合',
+    toSeason:'看本月盛產 →',
+    nearby:'附近學校午餐',
+    cookAtHome:'在家煮',
+    schoolMenu:'學校午餐',
+    ingredients:'食材',
+    seasonings:'調味料',
+    cert:'認證標章',
+    servings:'份數',
+    shopAdd:'加入購物清單',
+    shopAdded:'已加入購物清單',
+    aiGen:'AI 生成食譜',
+    aiDisc:'由 AI 依菜名與學校食材清單生成，僅供參考。',
+    steps:'作法',
+    seasonTitle:'本月盛產（10 月）',
+    seasonLead:'學校本週也在用的會排在前面。',
+    local:'在地',
+    all:'全台灣',
+    cropTypes:{all:'全部',fruit:'水果',veg:'蔬菜',grain:'雜糧'},
+    seasonLocalEmpty:(c)=>`你的縣市（${c}）本月無盛產資料，已改顯示全台灣。`,
+    usedBySchools:'學校本週使用中',
+    cropDetail:'盛產資訊',
+    peakMonths:'盛產月份',
+    mainCounties:'主要產地',
+    usedInDishes:'本週入菜',
+    weekHeroEyebrow:'本週最多學校使用',
+    weekList:'本週食材排行',
+    atSchools:n=>`${n} 所學校使用`,
+    meShop:'購物清單',
+    meFav:'我的最愛',
+    meCooked:'煮過的菜',
+    meSettings:'設定',
+    meAbout:'關於資料',
+    emptyShop:'購物清單是空的。到任一道菜的「在家煮」勾選食材即可加入。',
+    emptyFav:'還沒有收藏。',
+    emptyCooked:'還沒有煮過的紀錄。',
+    settingRegion:'地區',
+    settingServings:'份數',
+    settingDiet:'飲食偏好',
+    settingLang:'語言',
+    dietNone:'無限制',
+    aboutSources:'資料來源',
+    aboutUpdated:'最後更新',
+    aboutDisc:'只是用餐靈感，非醫療或營養建議。',
+    src1:'校園食材登錄平臺（教育部）',
+    src2:'每月盛產農產品產地（農業部）',
+    weekend:'週末沒有學校午餐',
+    weekendBody:'先看看本月盛產，星期一再回來看菜單。',
+    clearList:'清空',
+    done:'完成',
+    next:'下一步',
+    start:'開始',
+    skip:'略過設定',
+    w1t:'歡迎使用 Hochia 好食',
+    w1b:'每天幫你決定「今天吃什麼」——用全台學校營養師排的午餐菜單，加上當季盛產食材。免註冊、免登入。',
+    w1lang:'先選語言',
+    w2t:'你在哪裡？',
+    w2b:'用來找附近學校的菜單與在地盛產。',
+    w3t:'幾個人吃、有忌口嗎？',
+    w3b:'食譜份量會依此調整，今天的推薦也會避開。',
+    diets:{veg:'素食',nobeef:'不吃牛',noseafood:'不吃海鮮'},
+    pickRegionTitle:'選擇縣市',
+    pickRegionLead:'用於顯示附近學校與在地盛產。',
+    counties:['基隆市','臺北市','新北市','桃園市','新竹市','新竹縣','苗栗縣','臺中市','彰化縣','南投縣','雲林縣','嘉義市','嘉義縣','臺南市','高雄市','屏東縣','宜蘭縣','花蓮縣','臺東縣','澎湖縣','金門縣','連江縣'],
+    districts:{'臺北市':['大安區','中正區','信義區','士林區']},
+  },
+  'en':{
+    tagline:'Good Eats',
+    tabs:{today:'Today',season:'In Season',week:'This Week',me:'Me'},
+    sample:'Sample data: In-Season produce is real open data from the Ministry of Agriculture; school menus are still mocked, pending the School Catering platform.',
+    todayEyebrow:"Da'an Dist. · Taipei City",
+    todayPickTitle:"Today's meal",
+    foodGroups:{veg:'Vegetables',pro:'Protein',grain:'Grains'},
+    pickWhy:'Most common combo across 6 nearby schools',
+    toSeason:"See what's in season →",
+    nearby:'Nearby school lunches',
+    cookAtHome:'Cook at home',
+    schoolMenu:'School lunch',
+    ingredients:'Ingredients',
+    seasonings:'Seasonings',
+    cert:'Certification',
+    servings:'Servings',
+    shopAdd:'Add to shopping list',
+    shopAdded:'Added to shopping list',
+    aiGen:'AI-generated recipe',
+    aiDisc:"Generated by AI from the dish name and the school's ingredient list. For reference only.",
+    steps:'Steps',
+    seasonTitle:'In season (October)',
+    seasonLead:'Crops schools are also using this week rank first.',
+    local:'Local',
+    all:'All Taiwan',
+    cropTypes:{all:'All',fruit:'Fruit',veg:'Vegetable',grain:'Grain'},
+    seasonLocalEmpty:(c)=>`No in-season produce for your county (${c}) this month — showing all of Taiwan.`,
+    usedBySchools:'Used by schools this week',
+    cropDetail:'In-season info',
+    peakMonths:'Peak months',
+    mainCounties:'Main growing areas',
+    usedInDishes:'In dishes this week',
+    weekHeroEyebrow:'Most-used by schools this week',
+    weekList:'This week, ranked',
+    atSchools:n=>`Used by ${n} schools`,
+    meShop:'Shopping list',
+    meFav:'Favorites',
+    meCooked:'I cooked this',
+    meSettings:'Settings',
+    meAbout:'About the data',
+    emptyShop:"Your shopping list is empty. Tick ingredients in any dish's Cook-at-home to add them.",
+    emptyFav:'No favorites yet.',
+    emptyCooked:'No cooking history yet.',
+    settingRegion:'Region',
+    settingServings:'Servings',
+    settingDiet:'Diet',
+    settingLang:'Language',
+    dietNone:'No restriction',
+    aboutSources:'Sources',
+    aboutUpdated:'Last updated',
+    aboutDisc:'Meal ideas only — not medical or nutritional advice.',
+    src1:'School Catering Platform (Ministry of Education)',
+    src2:'Monthly peak-season produce (Ministry of Agriculture)',
+    weekend:'No school lunch on weekends',
+    weekendBody:"Here's what's in season instead. Menus return on Monday.",
+    clearList:'Clear',
+    done:'Done',
+    next:'Next',
+    start:'Start',
+    skip:'Skip setup',
+    w1t:'Welcome to Hochia',
+    w1b:"Decides what to eat each day — from lunch menus planned by school nutritionists across Taiwan, plus what's in peak season. No sign-up, no login.",
+    w1lang:'Choose a language',
+    w2t:'Where are you?',
+    w2b:'Used to find nearby school menus and local produce.',
+    w3t:'How many, any restrictions?',
+    w3b:"Recipe amounts scale to this, and today's pick avoids them.",
+    diets:{veg:'Vegetarian',nobeef:'No beef',noseafood:'No seafood'},
+    pickRegionTitle:'Choose city / county',
+    pickRegionLead:'Used to show nearby schools and local produce.',
+    counties:['Keelung','Taipei','New Taipei','Taoyuan','Hsinchu City','Hsinchu County','Miaoli','Taichung','Changhua','Nantou','Yunlin','Chiayi City','Chiayi County','Tainan','Kaohsiung','Pingtung','Yilan','Hualien','Taitung','Penghu','Kinmen','Lienchiang'],
+    districts:{'Taipei':["Da'an","Zhongzheng","Xinyi","Shilin"]},
+  }
+};
+
+/* ---------------- sample data (bilingual) ---------------- */
+const L=(o)=>o[state.lang==='en'?'en':'zh'];  // data objects key on zh/en; UI lang is zh-TW/en
+const DAYS=[
+  {zh:'一',en:'Mon',d:'20',wd:1},{zh:'二',en:'Tue',d:'21',wd:2},
+  {zh:'三',en:'Wed',d:'22',wd:3},{zh:'四',en:'Thu',d:'23',wd:4},
+  {zh:'五',en:'Fri',d:'24',wd:5},{zh:'六',en:'Sat',d:'25',wd:6},{zh:'日',en:'Sun',d:'26',wd:0}
+];
+const DISHES={
+  sanbei:{nm:{zh:'三杯雞',en:'Three-cup chicken'},grp:'pro',
+    ings:[{nm:{zh:'雞腿肉',en:'Chicken thigh'},amt:{1:'180 g',base:180,unit:'g'},cert:{zh:'產銷履歷',en:'Traceable'}},
+          {nm:{zh:'九層塔',en:'Thai basil'},amt:{base:15,unit:'g'}},
+          {nm:{zh:'老薑',en:'Ginger'},amt:{base:20,unit:'g'}},
+          {nm:{zh:'蒜頭',en:'Garlic'},amt:{base:3,unit:'瓣',unitEn:'cloves'}},
+          {nm:{zh:'麻油',en:'Sesame oil'},amt:{base:15,unit:'ml'}},
+          {nm:{zh:'醬油',en:'Soy sauce'},amt:{base:20,unit:'ml'}}],
+    steps:{zh:['麻油小火爆香薑片與蒜頭至微焦。','下雞肉中火煎到表面上色。','加醬油、米酒與少許糖，燜煮約 8 分鐘。','收汁後關火，拌入九層塔即可。'],
+           en:['Gently fry ginger and garlic in sesame oil until fragrant.','Add chicken, brown over medium heat.','Add soy sauce, rice wine and a little sugar; simmer ~8 min.','Reduce, turn off heat, fold in basil.']}},
+  shicai:{nm:{zh:'炒青江菜',en:'Stir-fried bok choy'},grp:'veg',
+    ings:[{nm:{zh:'青江菜',en:'Bok choy'},amt:{base:200,unit:'g'},cert:{zh:'有機',en:'Organic'}},
+          {nm:{zh:'蒜末',en:'Minced garlic'},amt:{base:5,unit:'g'}},
+          {nm:{zh:'食用油',en:'Cooking oil'},amt:{base:10,unit:'ml'}}],
+    steps:{zh:['青江菜洗淨切段。','熱油爆香蒜末，下菜快炒。','加少許鹽調味，炒至翠綠即起鍋。'],
+           en:['Wash and cut bok choy.','Fry garlic in hot oil, add greens and stir-fry fast.','Season with a little salt; serve while bright green.']}},
+  miso:{nm:{zh:'味噌豆腐湯',en:'Miso tofu soup'},grp:'pro',
+    ings:[{nm:{zh:'嫩豆腐',en:'Soft tofu'},amt:{base:150,unit:'g'},cert:{zh:'非基改',en:'Non-GMO'}},
+          {nm:{zh:'味噌',en:'Miso paste'},amt:{base:30,unit:'g'}},
+          {nm:{zh:'海帶芽',en:'Wakame'},amt:{base:5,unit:'g'}}],
+    steps:{zh:['水滾後下豆腐與海帶芽。','味噌先用少量熱湯化開再倒回。','微滾即關火，避免煮沸。'],
+           en:['Bring water to a boil; add tofu and wakame.','Dissolve miso in a little hot broth, stir back in.','Heat until just steaming; do not boil.']}},
+  rice:{nm:{zh:'糙米飯',en:'Brown rice'},grp:'grain',
+    ings:[{nm:{zh:'糙米',en:'Brown rice'},amt:{base:80,unit:'g'},cert:{zh:'CAS',en:'CAS'}}],
+    steps:{zh:['糙米洗淨浸泡 30 分鐘。','米水比約 1:1.2，電鍋煮熟後燜 10 分鐘。'],
+           en:['Rinse and soak brown rice 30 min.','Cook at ~1:1.2 rice-to-water; rest 10 min.']}},
+};
+const TODAY_PICK=['sanbei','shicai','miso','rice'];
+const SCHOOLS=[
+  {nm:{zh:'大安國小',en:"Da'an Elementary"},dist:{zh:'大安區 · 0.4 km',en:"Da'an · 0.4 km"},menu:['sanbei','shicai','miso','rice']},
+  {nm:{zh:'幸安國小',en:'Xingan Elementary'},dist:{zh:'大安區 · 0.8 km',en:"Da'an · 0.8 km"},menu:['sanbei','shicai','miso','rice']},
+  {nm:{zh:'仁愛國中',en:"Ren'ai Junior High"},dist:{zh:'大安區 · 1.1 km',en:"Da'an · 1.1 km"},menu:['shicai','miso','rice','sanbei']},
+  {nm:{zh:'新生國小',en:'Xinsheng Elementary'},dist:{zh:'中正區 · 1.6 km',en:'Zhongzheng · 1.6 km'},menu:['sanbei','rice','shicai','miso']},
+];
+/* Real 農業部 data: all 35 edible crops with an October peak, from moa_061.json
+   (UnitId=061; excludes 花卉 flowers and 茶 teas). Peak = contiguous month ranges. */
+const CROPS=[
+  {nm:{zh:'柿子',en:'Persimmon'},alias:null,type:'fruit',peak:'8–12',counties:{zh:'臺中市、新竹縣、苗栗縣',en:'Taichung, Hsinchu, Miaoli'},cty:['臺中市','嘉義縣','新竹縣','苗栗縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'西瓜',en:'Watermelon'},alias:null,type:'fruit',peak:'3–11',counties:{zh:'雲林縣、屏東縣、花蓮縣',en:'Yunlin, Pingtung, Hualien'},cty:['苗栗縣','彰化縣','雲林縣','屏東縣','花蓮縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'菇類',en:'Mushrooms'},alias:null,type:'veg',peak:'1–12',counties:{zh:'南投縣、臺中市、桃園市',en:'Nantou, Taichung, Taoyuan'},cty:['臺中市','桃園市','南投縣','花蓮縣','雲林縣','彰化縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'結球白菜',en:'Napa cabbage'},alias:{zh:'大白菜',en:'(大白菜)'},type:'veg',peak:'1–4、8–12',counties:{zh:'雲林縣、彰化縣、嘉義縣',en:'Yunlin, Changhua, Chiayi'},cty:['彰化縣','雲林縣','嘉義縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'花椰菜',en:'Cauliflower'},alias:null,type:'veg',peak:'1–4、8–12',counties:{zh:'彰化縣、雲林縣、高雄市',en:'Changhua, Yunlin, Kaohsiung'},cty:['臺南市','高雄市','苗栗縣','彰化縣','雲林縣','嘉義縣'],inWeek:true,dishes:[]},
+  {nm:{zh:'香蕉',en:'Banana'},alias:null,type:'fruit',peak:'1–12',counties:{zh:'嘉義縣、南投縣、屏東縣',en:'Chiayi, Nantou, Pingtung'},cty:['高雄市','南投縣','嘉義縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'葡萄',en:'Grapes'},alias:null,type:'fruit',peak:'1、3–12',counties:{zh:'彰化縣、臺中市、南投縣',en:'Changhua, Taichung, Nantou'},cty:['臺中市','苗栗縣','南投縣','彰化縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'木瓜',en:'Papaya'},alias:null,type:'fruit',peak:'1–12',counties:{zh:'臺南市、屏東縣、高雄市',en:'Tainan, Pingtung, Kaohsiung'},cty:['臺南市','高雄市','南投縣','雲林縣','嘉義縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'甘藍',en:'Cabbage'},alias:{zh:'高麗菜',en:'(aka 高麗菜)'},type:'veg',peak:'1–4、8–12',counties:{zh:'雲林縣、嘉義縣、彰化縣',en:'Yunlin, Chiayi, Changhua'},cty:['彰化縣','雲林縣','嘉義縣'],inWeek:true,dishes:[]},
+  {nm:{zh:'毛豆',en:'Edamame'},alias:null,type:'veg',peak:'4–6、10–12',counties:{zh:'屏東縣、雲林縣、彰化縣',en:'Pingtung, Yunlin, Changhua'},cty:['彰化縣','雲林縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'番茄',en:'Tomato'},alias:null,type:'veg',peak:'1–12',counties:{zh:'嘉義縣、高雄市、南投縣',en:'Chiayi, Kaohsiung, Nantou'},cty:['臺南市','高雄市','南投縣','雲林縣','嘉義縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'青蔥',en:'Green onion'},alias:null,type:'veg',peak:'1–12',counties:{zh:'雲林縣、宜蘭縣、彰化縣',en:'Yunlin, Yilan, Changhua'},cty:['宜蘭縣','高雄市','彰化縣','雲林縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'椪柑',en:'Ponkan'},alias:null,type:'fruit',peak:'1、10–12',counties:{zh:'臺中市、嘉義縣、臺南市',en:'Taichung, Chiayi, Tainan'},cty:['臺中市','臺南市','苗栗縣','雲林縣','嘉義縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'紅龍果',en:'Dragon fruit'},alias:null,type:'fruit',peak:'6–11',counties:{zh:'臺中市、臺南市、高雄市',en:'Taichung, Tainan, Kaohsiung'},cty:['臺中市','臺南市','高雄市','南投縣','彰化縣','雲林縣','嘉義縣','屏東縣','臺東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'茄子',en:'Eggplant'},alias:null,type:'veg',peak:'3–11',counties:{zh:'屏東縣、高雄市、南投縣',en:'Pingtung, Kaohsiung, Nantou'},cty:['高雄市','南投縣','彰化縣','雲林縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'絲瓜',en:'Loofah'},alias:null,type:'veg',peak:'3–11',counties:{zh:'高雄市、南投縣、臺南市',en:'Kaohsiung, Nantou, Tainan'},cty:['臺南市','高雄市','南投縣','雲林縣','嘉義縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'番石榴',en:'Guava'},alias:null,type:'fruit',peak:'1–12',counties:{zh:'高雄市、臺南市、彰化縣',en:'Kaohsiung, Tainan, Changhua'},cty:['臺南市','高雄市','彰化縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'蘿蔔',en:'Radish'},alias:null,type:'veg',peak:'1–12',counties:{zh:'彰化縣、高雄市、南投縣',en:'Changhua, Kaohsiung, Nantou'},cty:['南投縣','彰化縣','雲林縣','高雄市'],inWeek:false,dishes:[]},
+  {nm:{zh:'苦瓜',en:'Bitter gourd'},alias:null,type:'veg',peak:'3–11',counties:{zh:'屏東縣、臺中市、高雄市',en:'Pingtung, Taichung, Kaohsiung'},cty:['臺中市','高雄市','彰化縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'甜椒',en:'Bell pepper'},alias:null,type:'veg',peak:'1–12',counties:{zh:'南投縣、雲林縣、嘉義縣',en:'Nantou, Yunlin, Chiayi'},cty:['南投縣','雲林縣','嘉義縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'辣椒',en:'Chili pepper'},alias:null,type:'veg',peak:'1–12',counties:{zh:'嘉義縣、臺中市、臺南市',en:'Chiayi, Taichung, Tainan'},cty:['臺中市','臺南市','高雄市','嘉義縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'甜瓜',en:'Melon'},alias:null,type:'fruit',peak:'1–6、8–12',counties:{zh:'臺南市、高雄市、雲林縣',en:'Tainan, Kaohsiung, Yunlin'},cty:['臺南市','高雄市','雲林縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'茭白筍',en:'Water bamboo'},alias:null,type:'veg',peak:'4–11',counties:{zh:'新北市、南投縣、宜蘭縣',en:'New Taipei, Nantou, Yilan'},cty:['新北市','宜蘭縣','南投縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'胡瓜',en:'Cucumber'},alias:null,type:'veg',peak:'1–4、8–12',counties:{zh:'屏東縣、高雄市、苗栗縣',en:'Pingtung, Kaohsiung, Miaoli'},cty:['高雄市','苗栗縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'金針',en:'Daylily buds'},alias:null,type:'veg',peak:'4–6、8–10',counties:{zh:'花蓮縣、臺東縣',en:'Hualien, Taitung'},cty:['花蓮縣','臺東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'酪梨',en:'Avocado'},alias:null,type:'fruit',peak:'7–10',counties:{zh:'臺南市、嘉義縣',en:'Tainan, Chiayi'},cty:['臺南市','嘉義縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'甘藷',en:'Sweet potato'},alias:null,type:'grain',peak:'1–5、8–10、12',counties:{zh:'臺中市、新北市',en:'Taichung, New Taipei'},cty:['臺中市','新北市'],inWeek:false,dishes:[]},
+  {nm:{zh:'楊桃',en:'Starfruit'},alias:null,type:'fruit',peak:'1–4、7–12',counties:{zh:'臺南市、苗栗縣、屏東縣',en:'Tainan, Miaoli, Pingtung'},cty:['臺南市','苗栗縣','屏東縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'葡萄柚',en:'Grapefruit'},alias:null,type:'fruit',peak:'9–11',counties:{zh:'嘉義縣',en:'Chiayi'},cty:['嘉義縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'山藥',en:'Yam'},alias:null,type:'veg',peak:'1–7、9–12',counties:{zh:'南投縣、屏東縣、花蓮縣',en:'Nantou, Pingtung, Hualien'},cty:['南投縣','屏東縣','花蓮縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'溫帶梨',en:'Pear'},alias:null,type:'fruit',peak:'8–11',counties:{zh:'臺中市、南投縣',en:'Taichung, Nantou'},cty:['臺中市','南投縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'蘋果',en:'Apple'},alias:null,type:'fruit',peak:'8–11',counties:{zh:'臺中市、南投縣',en:'Taichung, Nantou'},cty:['臺中市','南投縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'鳳梨',en:'Pineapple'},alias:null,type:'fruit',peak:'6–10',counties:{zh:'南投縣',en:'Nantou'},cty:['南投縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'百香果',en:'Passion fruit'},alias:null,type:'fruit',peak:'2–12',counties:{zh:'南投縣',en:'Nantou'},cty:['南投縣'],inWeek:false,dishes:[]},
+  {nm:{zh:'綠豆',en:'Mung bean'},alias:null,type:'grain',peak:'1、5–12',counties:{zh:'嘉義縣',en:'Chiayi'},cty:['嘉義縣'],inWeek:false,dishes:[]},
+];
+const WEEK_ING=[
+  {nm:{zh:'甘藍',en:'Cabbage'},grp:'veg',schools:142,peak:true},
+  {nm:{zh:'雞蛋',en:'Eggs'},grp:'pro',schools:131,peak:false},
+  {nm:{zh:'豬後腿肉',en:'Pork leg'},grp:'pro',schools:118,peak:false},
+  {nm:{zh:'白蘿蔔',en:'Daikon radish'},grp:'veg',schools:96,peak:true},
+  {nm:{zh:'糙米',en:'Brown rice'},grp:'grain',schools:88,peak:false},
+  {nm:{zh:'青江菜',en:'Bok choy'},grp:'veg',schools:77,peak:false},
+  {nm:{zh:'豆腐',en:'Tofu'},grp:'pro',schools:64,peak:false},
+  {nm:{zh:'地瓜',en:'Sweet potato'},grp:'grain',schools:51,peak:true},
+];
+
+/* ---------------- state ---------------- */
+const state={
+  lang:(navigator.language||'').startsWith('zh')?'zh-TW':'zh-TW',
+  tab:'today', day:4 /* Fri index */, detail:null,
+  servings:4, seasonFilter:'local', seasonGroup:'all', weekGroup:'all',
+  shopping:new Set(), favorites:new Set(), cooked:[],
+  region:null, diet:new Set(), setupStep:0, setupDone:false,
+};
+// default region (canonical zh for filtering + display strings per language)
+state.region={cZh:'臺北市',cEn:'Taipei',dZh:'大安區',dEn:"Da'an"};
+
+/* ---------------- helpers ---------------- */
+const el=(id)=>document.getElementById(id);
+function toast(msg){const t=el('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),1600);}
+function groupTag(g){const t=T[state.lang].foodGroups;return `<span class="tag ${g}">${t[g]}</span>`;}
+function amtFor(ing){const a=ing.amt;const n=Math.round(a.base*state.servings/4*10)/10;const unit=(state.lang==='en'&&a.unitEn)?a.unitEn:a.unit;return `${n} ${unit}`;}
+
+/* ---------------- persistence (per-device, best-effort) ---------------- */
+const LSKEY='hochia.prefs.v1';
+function save(){try{localStorage.setItem(LSKEY,JSON.stringify({lang:state.lang,region:state.region,servings:state.servings,diet:[...state.diet],shopping:[...state.shopping],favorites:[...state.favorites],cooked:state.cooked,setupDone:state.setupDone}));}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(LSKEY)||'null');if(!s)return false;if(s.lang)state.lang=s.lang;if(s.region)state.region=s.region;if(typeof s.servings==='number')state.servings=s.servings;if(Array.isArray(s.diet))state.diet=new Set(s.diet);if(Array.isArray(s.shopping))state.shopping=new Set(s.shopping);if(Array.isArray(s.favorites))state.favorites=new Set(s.favorites);if(Array.isArray(s.cooked))state.cooked=s.cooked;state.setupDone=!!s.setupDone;return state.setupDone;}catch(e){return false;}}
+
+/* ---------------- renderers ---------------- */
+function render(){
+  const t=T[state.lang];
+  el('tagline').textContent=t.tagline;
+  // lang buttons
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===state.lang)));
+  // nav
+  el('nav').innerHTML=Object.keys(t.tabs).map(k=>
+    `<button class="tab" data-tab="${k}" aria-pressed="${state.tab===k}">${IC[k]}<span>${t.tabs[k]}</span></button>`).join('');
+  // view
+  const v=el('view');
+  if(state.detail){v.innerHTML=renderDetail();}
+  else v.innerHTML={today:renderToday,season:renderSeason,week:renderWeek,me:renderMe}[state.tab]();
+  el('main').scrollTop=0;
+  save();
+}
+function sampleFlag(){return `<div class="sample-flag">${IC.info}<span>${T[state.lang].sample}</span></div>`;}
+
+function renderToday(){
+  const t=T[state.lang];const weekend=DAYS[state.day].wd===0||DAYS[state.day].wd===6;
+  const days=DAYS.map((d,i)=>`<button class="day" data-day="${i}" aria-pressed="${i===state.day}"><span>${L(d)}</span><b>${d.d}</b></button>`).join('');
+  let pick;
+  if(weekend){
+    pick=`<div class="card pad"><div class="row between"><div class="eyebrow">${t.weekend}</div></div>
+      <p class="muted" style="margin:8px 0 14px">${t.weekendBody}</p>
+      <button class="btn primary block" data-go="season">${t.toSeason}</button></div>`;
+  }else{
+    const lines=TODAY_PICK.map(id=>{const d=DISHES[id];return `<div class="dishline"><span class="dot"></span><span class="nm">${L(d.nm)}</span>${groupTag(d.grp)}</div>`;}).join('');
+    pick=`<div class="card pick">
+      <div class="pbar"></div>
+      <div class="pick-body">
+        <div class="eyebrow">${t.todayPickTitle} · ${t.pickWhy}</div>
+        <div class="dishgrid">${lines}</div>
+        <div class="tags">${groupTag('veg')}${groupTag('pro')}${groupTag('grain')}</div>
+      </div></div>`;
+  }
+  const schools=SCHOOLS.map((s,i)=>`<button class="li" data-school="${i}">
+      <span class="ic">${IC.school}</span>
+      <span class="tx"><b>${L(s.nm)}</b><span>${L(s.dist)}</span></span>${IC.chev}</button>`).join('');
+  return `${sampleFlag()}
+    <button class="loc" data-pickregion><span class="pin">${IC.pin}</span>${regionLabel()}<span class="chev">${IC.chev}</span></button>
+    <div class="days">${days}</div>
+    ${pick}
+    ${weekend?'':`<button class="card pad row between" style="width:100%;text-align:left;border:1px solid var(--border)" data-go="season">
+      <span class="row">${IC.leaf}<b>${t.toSeason.replace(' →','')}</b></span>${IC.chev}</button>`}
+    <h2 class="sec">${t.nearby}</h2>
+    <div class="card pad"><div class="list">${schools}</div></div>`;
+}
+
+function renderSeason(){
+  const t=T[state.lang];
+  const cDisp=state.lang==='en'?state.region.cEn:state.region.cZh;
+  let items=CROPS.map((c,i)=>({c,i}));
+  if(state.seasonGroup!=='all') items=items.filter(x=>x.c.type===state.seasonGroup);
+  let widened=false;
+  if(state.seasonFilter==='local'){
+    const loc=items.filter(x=>x.c.cty && x.c.cty.includes(state.region.cZh));
+    if(loc.length) items=loc; else widened=true; // sparse: no local produce -> show all Taiwan + notice
+  }
+  items.sort((a,b)=>(b.c.inWeek?1:0)-(a.c.inWeek?1:0)); // schools-this-week first; keep each crop's real index
+  const rows=items.length?items.map(({c,i})=>`<button class="li" data-crop="${i}">
+        <span class="ic">${IC.leaf}</span>
+        <span class="tx"><b>${L(c.nm)} ${c.alias?`<span class="muted" style="font-weight:500">${L(c.alias)}</span>`:''}</b>
+          <span>${c.inWeek?`<span class="badge">${t.usedBySchools}</span> · `:''}${t.peakMonths} ${c.peak}</span></span>${IC.chev}</button>`).join('')
+    :`<div class="empty">${IC.leaf}<span>${state.lang==='en'?'Nothing in this group this month.':'本月此類別沒有盛產。'}</span></div>`;
+  const gchips=['all','fruit','veg','grain'].map(g=>`<button class="chip" data-sgroup="${g}" aria-pressed="${state.seasonGroup===g}">${t.cropTypes[g]}</button>`).join('');
+  const widenNote=widened?`<div class="notice">${IC.info}<span>${t.seasonLocalEmpty(cDisp)}</span></div>`:'';
+  return `${sampleFlag()}
+    <h2 class="sec">${t.seasonTitle}</h2>
+    <p class="muted" style="margin:0">${t.seasonLead}</p>
+    <div class="chips">
+      <button class="chip" data-season="local" aria-pressed="${state.seasonFilter==='local'}">${t.local}（${cDisp}）</button>
+      <button class="chip" data-season="all" aria-pressed="${state.seasonFilter==='all'}">${t.all}</button>
+    </div>
+    <div class="chips">${gchips}</div>
+    ${widenNote}
+    <div class="card pad"><div class="list">${rows}</div></div>`;
+}
+
+function renderWeek(){
+  const t=T[state.lang];const hero=WEEK_ING[0];
+  const groups=['all','veg','pro','grain'];
+  const chips=groups.map(g=>`<button class="chip" data-week="${g}" aria-pressed="${state.weekGroup===g}">${g==='all'?(state.lang==='en'?'All':'全部'):t.foodGroups[g]}</button>`).join('');
+  const rows=WEEK_ING.filter(w=>state.weekGroup==='all'||w.grp===state.weekGroup).map(w=>`
+    <div class="li" style="cursor:default">
+      <span class="ic">${IC.bag}</span>
+      <span class="tx"><b>${L(w.nm)} ${w.peak?`<span class="badge corn">${state.lang==='en'?'In season':'盛產'}</span>`:''}</b>
+        <span>${t.atSchools(w.schools)} · ${t.foodGroups[w.grp]}</span></span>
+    </div>`).join('');
+  return `${sampleFlag()}
+    <div class="hero">
+      <div class="eyebrow" style="color:rgba(255,255,255,.85)">${t.weekHeroEyebrow}</div>
+      <div class="k">${L(hero.nm)}</div>
+      <div class="s">${t.atSchools(hero.schools)}</div>
+      <span class="hbadge">${state.lang==='en'?'In season now':'現正盛產'}</span>
+    </div>
+    <h2 class="sec">${t.weekList}</h2>
+    <div class="chips">${chips}</div>
+    <div class="card pad"><div class="list">${rows}</div></div>`;
+}
+
+function renderMe(){
+  const t=T[state.lang];
+  const diet=[...state.diet].map(d=>T[state.lang].diets[d]).join(state.lang==='en'?', ':'、')||t.dietNone;
+  return `${sampleFlag()}
+    <h2 class="sec">${t.meSettings}</h2>
+    <div class="card pad"><div class="list">
+      <div class="merow"><span class="ic">${IC.settings}</span><span class="tx"><b>${t.settingServings}</b><span>${state.servings}</span></span></div>
+      <div class="merow"><span class="ic">${IC.settings}</span><span class="tx"><b>${t.settingDiet}</b><span>${diet}</span></span></div>
+    </div></div>
+    <h2 class="sec">${t.meAbout}</h2>
+    <div class="card pad" style="display:flex;flex-direction:column;gap:10px">
+      <div><div class="eyebrow">${t.aboutSources}</div>
+        <div class="muted" style="margin-top:6px">• ${t.src1}<br>• ${t.src2}</div></div>
+      <div><div class="eyebrow">${t.aboutUpdated}</div><div class="muted" style="margin-top:6px">2026/10/24 18:00</div></div>
+      <div class="notice">${IC.info}<span>${t.aboutDisc}</span></div>
+    </div>`;
+}
+
+function renderDetail(){
+  const t=T[state.lang];const d=state.detail;
+  const back=`<div class="detail-top"><button class="back">${IC.back}${t.tabs[state.tab]}</button></div>`;
+  if(d.type==='school'){
+    const s=SCHOOLS[d.id];
+    const dishes=s.menu.map(id=>{const dd=DISHES[id];return `<div class="li" style="cursor:default">
+      <span class="ic">${IC.pot}</span><span class="tx"><b>${L(dd.nm)}</b><span>${t.foodGroups[dd.grp]}</span></span></div>`;}).join('');
+    return `${back}<h2 class="sec">${L(s.nm)}</h2><p class="muted" style="margin:0">${L(s.dist)} · ${t.schoolMenu}</p>
+      <div class="card pad"><div class="list">${dishes}</div></div>`;
+  }
+  if(d.type==='crop'){
+    const c=CROPS[d.id];
+    return `${back}<h2 class="sec">${L(c.nm)} ${c.alias?`<span class="muted" style="font-weight:500;font-size:var(--fs-base)">${L(c.alias)}</span>`:''}</h2>
+      ${c.inWeek?`<div><span class="badge">${t.usedBySchools}</span></div>`:''}
+      <div class="card pad" style="display:flex;flex-direction:column;gap:12px">
+        <div><div class="eyebrow">${t.peakMonths}</div><div style="margin-top:4px;font-weight:700">${c.peak} ${state.lang==='en'?'':'月'}</div></div>
+        <div><div class="eyebrow">${t.mainCounties}</div><div style="margin-top:4px">${L(c.counties)}</div></div>
+      </div>`;
+  }
+  return `${back}`; // cook-at-home (在家煮) removed
+}
+
+/* ---------------- first-run setup ---------------- */
+function renderSetup(){
+  state.overlayMode='setup';
+  const t=T[state.lang];const ov=el('overlay');ov.hidden=false;
+  const dots=`<div class="dots">${[0,1,2].map(i=>`<i class="${i===state.setupStep?'on':''}"></i>`).join('')}</div>`;
+  let body='';
+  if(state.setupStep===0){
+    body=`<h3>${t.w1t}</h3><p class="lead">${t.w1b}</p>
+      <div class="eyebrow">${t.w1lang}</div>
+      <div class="optgrid"><button class="opt" data-setlang="zh-TW" aria-pressed="${state.lang==='zh-TW'}">中文</button>
+        <button class="opt" data-setlang="en" aria-pressed="${state.lang==='en'}">English</button></div>
+      <button class="btn primary block" data-setup="next">${t.next}</button>`;
+  }else if(state.setupStep===1){
+    const counties=t.counties.map((c,i)=>`<button class="opt" data-county="${i}" aria-pressed="${T['zh-TW'].counties[i]===state.region.cZh}">${c}</button>`).join('');
+    body=`<h3>${t.w2t}</h3><p class="lead">${t.w2b}</p>
+      <div class="optgrid">${counties}</div>
+      <button class="btn primary block" data-setup="next">${t.next}</button>`;
+  }else{
+    const diets=Object.keys(t.diets).map(k=>`<button class="opt" data-diet="${k}" aria-pressed="${state.diet.has(k)}">${t.diets[k]}</button>`).join('');
+    body=`<h3>${t.w3t}</h3><p class="lead">${t.w3b}</p>
+      <div class="eyebrow">${t.settingServings}</div>
+      <div class="stepper" style="align-self:flex-start"><button data-ssteps="-1" ${state.servings<=1?'disabled':''}>−</button><span class="val">${state.servings}</span><button data-ssteps="1" ${state.servings>=8?'disabled':''}>+</button></div>
+      <div class="eyebrow">${t.settingDiet}</div>
+      <div class="optgrid">${diets}</div>
+      <button class="btn primary block" data-setup="done">${t.start}</button>`;
+  }
+  ov.innerHTML=`<div class="sheet">${dots}${body}<button class="skip" data-setup="skip">${t.skip}</button></div>`;
+}
+function closeSetup(){state.overlayMode=null;state.setupDone=true;el('overlay').hidden=true;el('overlay').innerHTML='';render();}
+function regionLabel(){const r=state.region;const city=state.lang==='en'?r.cEn:r.cZh;const d=state.lang==='en'?r.dEn:r.dZh;return (d&&d!=='—')?`${city} · ${d}`:city;}
+function renderRegionPicker(){
+  state.overlayMode='region';
+  const t=T[state.lang];const ov=el('overlay');ov.hidden=false;
+  const counties=t.counties.map((c,i)=>`<button class="opt" data-pickcounty="${i}" aria-pressed="${T['zh-TW'].counties[i]===state.region.cZh}">${c}</button>`).join('');
+  ov.innerHTML=`<div class="sheet"><h3>${t.pickRegionTitle}</h3><p class="lead">${t.pickRegionLead}</p><div class="optgrid">${counties}</div><button class="skip" data-pickclose>${t.done}</button></div>`;
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener('click',(e)=>{
+  const tb=e.target.closest('.lang button'); if(tb){state.lang=tb.dataset.lang; if(!el('overlay').hidden){state.overlayMode==='region'?renderRegionPicker():renderSetup();} render(); return;}
+  const pr=e.target.closest('[data-pickregion]'); if(pr){renderRegionPicker();return;}
+  const pc=e.target.closest('[data-pickcounty]'); if(pc){const i=+pc.dataset.pickcounty;const cZh=T['zh-TW'].counties[i],cEn=T['en'].counties[i];const dZh=(T['zh-TW'].districts[cZh]||['—'])[0],dEn=(T['en'].districts[cEn]||['—'])[0];state.region={cZh,cEn,dZh,dEn};closeSetup();return;}
+  const px=e.target.closest('[data-pickclose]'); if(px){closeSetup();return;}
+  const tab=e.target.closest('.tab'); if(tab){state.tab=tab.dataset.tab;state.detail=null;render();return;}
+  const go=e.target.closest('[data-go]'); if(go){state.tab=go.dataset.go;state.detail=null;render();return;}
+  const sc=e.target.closest('[data-school]'); if(sc){state.detail={type:'school',id:+sc.dataset.school};render();return;}
+  const cr=e.target.closest('[data-crop]'); if(cr){state.detail={type:'crop',id:+cr.dataset.crop};render();return;}
+  const bk=e.target.closest('.back'); if(bk){state.detail=null;render();return;}
+  const sf=e.target.closest('[data-season]'); if(sf){state.seasonFilter=sf.dataset.season;render();return;}
+  const sg=e.target.closest('[data-sgroup]'); if(sg){state.seasonGroup=sg.dataset.sgroup;render();return;}
+  const wk=e.target.closest('[data-week]'); if(wk){state.weekGroup=wk.dataset.week;render();return;}
+  // setup
+  const sl=e.target.closest('[data-setlang]'); if(sl){state.lang=sl.dataset.setlang;renderSetup();render();return;}
+  const cty=e.target.closest('[data-county]'); if(cty){const i=+cty.dataset.county;const cZh=T['zh-TW'].counties[i],cEn=T['en'].counties[i];const dZh=(T['zh-TW'].districts[cZh]||['—'])[0],dEn=(T['en'].districts[cEn]||['—'])[0];state.region={cZh,cEn,dZh,dEn};renderSetup();return;}
+  const dt=e.target.closest('[data-diet]'); if(dt){const k=dt.dataset.diet;if(state.diet.has(k))state.diet.delete(k);else state.diet.add(k);renderSetup();return;}
+  const ss=e.target.closest('[data-ssteps]'); if(ss){state.servings=Math.min(8,Math.max(1,state.servings+ +ss.dataset.ssteps));renderSetup();return;}
+  const su=e.target.closest('[data-setup]'); if(su){const a=su.dataset.setup;
+     if(a==='next'){state.setupStep++;renderSetup();}
+     else{closeSetup();} return;}
+});
+
+/* ---------------- boot ---------------- */
+const resumed=load();      // restore saved prefs; skip first-run setup if already completed
+if(!resumed) renderSetup();
+render();
+</script>
+
+</body>
+</html>
