@@ -1,7 +1,19 @@
 import { setRequestLocale } from 'next-intl/server';
-import InfoTab from '@/components/InfoTab';
+import { cropsForMonth, currentMonth } from '@/lib/moa';
+import SampleBanner from '@/components/SampleBanner';
+import InSeasonClient from '@/components/InSeasonClient';
 
-export default function InSeasonPage({ params }: { params: { locale: string } }) {
+export const revalidate = 86400; // refresh the cached produce data daily
+
+export default async function InSeasonPage({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  return <InfoTab ns="inSeason" />;
+  const month = currentMonth();
+  const crops = await cropsForMonth(month);
+
+  return (
+    <div className="flex flex-col gap-3 px-4 py-4">
+      <SampleBanner />
+      <InSeasonClient crops={crops} month={month} />
+    </div>
+  );
 }

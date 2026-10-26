@@ -12,12 +12,30 @@
   "today": {
     "title": "What to eat today",
     "intro": "Today's dishes and ingredients from nearby school lunches, to help you decide.",
-    "comingSoon": "Today's pick, nearby school lunches and dish detail arrive in the features phase."
+    "pickTitle": "Today's pick",
+    "pickWhy": "Most common combo at nearby schools",
+    "nearby": "Nearby school lunches",
+    "schoolMenu": "school lunch",
+    "cityOnly": "School-lunch sample covers Taipei, Taichung, Tainan and Kaohsiung.",
+    "changeCity": "Choose a city in Me"
   },
   "inSeason": {
     "title": "In Season",
+    "titleMonth": "In season (month {month})",
     "intro": "This month's peak-season produce, filterable to local or all of Taiwan.",
-    "comingSoon": "The in-season list and crop detail connect to Ministry of Agriculture open data."
+    "local": "Local ({county})",
+    "all": "All Taiwan",
+    "groupAll": "All",
+    "groupFruit": "Fruit",
+    "groupVeg": "Vegetable",
+    "groupGrain": "Grain",
+    "peakMonths": "Peak months",
+    "mainCounties": "Main growing areas",
+    "monthWord": "",
+    "localEmpty": "No in-season produce for your county ({county}) this month — showing all of Taiwan.",
+    "emptyGroup": "Nothing in this group this month.",
+    "loadError": "Could not load Ministry of Agriculture data right now. Please try again later.",
+    "attribution": "Source: Agriculture and Food Agency, Ministry of Agriculture"
   },
   "thisWeek": {
     "title": "This Week",
@@ -62,6 +80,6 @@
   },
   "common": {
     "done": "Done",
-    "sample": "Preview: Phase 1 skeleton — features and data connect in later phases."
+    "sample": "In Season is live Ministry of Agriculture data; school lunches are a sample (Taipei / Taichung / Tainan / Kaohsiung)."
   }
 }

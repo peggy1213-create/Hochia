@@ -12,12 +12,30 @@
   "today": {
     "title": "今天吃什麼",
     "intro": "附近學校午餐的當日菜色與食材，幫你決定今天的一餐。",
-    "comingSoon": "今日推薦、附近學校午餐與菜色詳情將在功能階段接入。"
+    "pickTitle": "今日推薦",
+    "pickWhy": "附近學校最常見的組合",
+    "nearby": "附近學校午餐",
+    "schoolMenu": "學校午餐",
+    "cityOnly": "學校午餐示範資料僅含臺北、臺中、臺南、高雄。",
+    "changeCity": "到「我的」選擇縣市"
   },
   "inSeason": {
     "title": "本月盛產",
+    "titleMonth": "本月盛產（{month} 月）",
     "intro": "本月當季農產，可切換在地或全台灣。",
-    "comingSoon": "盛產清單與產地詳情將接入農業部開放資料。"
+    "local": "在地（{county}）",
+    "all": "全台灣",
+    "groupAll": "全部",
+    "groupFruit": "水果",
+    "groupVeg": "蔬菜",
+    "groupGrain": "雜糧",
+    "peakMonths": "盛產月份",
+    "mainCounties": "主要產地",
+    "monthWord": "月",
+    "localEmpty": "你的縣市（{county}）本月無盛產資料，已改顯示全台灣。",
+    "emptyGroup": "本月此類別沒有盛產。",
+    "loadError": "目前無法取得農業部資料，請稍後再試。",
+    "attribution": "資料來源：農業部農糧署"
   },
   "thisWeek": {
     "title": "本週食材",
@@ -62,6 +80,6 @@
   },
   "common": {
     "done": "完成",
-    "sample": "示範版：Phase 1 骨架，功能與資料將於後續階段接入。"
+    "sample": "本月盛產為農業部即時開放資料；學校午餐為示範樣本（臺北／臺中／臺南／高雄）。"
   }
 }
