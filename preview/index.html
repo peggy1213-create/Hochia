@@ -224,14 +224,14 @@ const T = {
   'zh-TW':{
     tagline:'好食',
     tabs:{today:'今天',season:'本月盛產',week:'本週食材',me:'我的'},
-    sample:'示範資料：本月盛產為農業部開放資料；學校午餐為校園食材登錄平臺真實資料（臺北市松山區，2025/05/13）。',
+    sample:'示範資料：本月盛產為農業部開放資料；學校午餐為校園食材登錄平臺真實資料（臺北／臺中／臺南／高雄，2025年5月）。',
     todayEyebrow:'大安區 · 臺北市',
     todayPickTitle:'今天的一餐',
     foodGroups:{veg:'蔬菜',pro:'豆魚蛋肉',grain:'全榖雜糧'},
     pickWhy:'附近學校最常見的組合',
     toSeason:'看本月盛產 →',
     nearby:'附近學校午餐',
-    schoolsCityOnly:'本預覽的學校午餐資料僅含臺北市（示範）。',
+    schoolsCityOnly:'本預覽的學校午餐資料僅含臺北、臺中、臺南、高雄（示範）。',
     switchTaipei:'切換到臺北市',
     cookAtHome:'在家煮',
     schoolMenu:'學校午餐',
@@ -300,14 +300,14 @@ const T = {
   'en':{
     tagline:'Good Eats',
     tabs:{today:'Today',season:'In Season',week:'This Week',me:'Me'},
-    sample:'Sample data: In-Season produce is real Ministry of Agriculture open data; school lunches are real data from the School Catering platform (Taipei Songshan, 2025/05/13). English dish names fall back to Chinese.',
+    sample:'Sample data: In-Season produce is real Ministry of Agriculture open data; school lunches are real School Catering platform data (Taipei / Taichung / Tainan / Kaohsiung, May 2025). English dish names fall back to Chinese.',
     todayEyebrow:"Da'an Dist. · Taipei City",
     todayPickTitle:"Today's meal",
     foodGroups:{veg:'Vegetables',pro:'Protein',grain:'Grains'},
     pickWhy:'Most common combo at nearby schools',
     toSeason:"See what's in season →",
     nearby:'Nearby school lunches',
-    schoolsCityOnly:'This preview only includes school-lunch data for Taipei.',
+    schoolsCityOnly:'This preview only includes school-lunch data for Taipei, Taichung, Tainan and Kaohsiung.',
     switchTaipei:'Switch to Taipei',
     cookAtHome:'Cook at home',
     schoolMenu:'School lunch',
@@ -382,42 +382,13 @@ const DAYS=[
   {zh:'三',en:'Wed',d:'22',wd:3},{zh:'四',en:'Thu',d:'23',wd:4},
   {zh:'五',en:'Fri',d:'24',wd:5},{zh:'六',en:'Sat',d:'25',wd:6},{zh:'日',en:'Sun',d:'26',wd:0}
 ];
-const MENU_DATE='2025/05/13';
-const DISHES={
-  '白米飯':{nm:{zh:'白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},
-  '青江菜':{nm:{zh:'青江菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'青江菜'},cert:{zh:'產銷履歷'}}]},
-  '綠豆粉圓':{nm:{zh:'綠豆粉圓'},cat:{zh:'湯品'},ings:[{nm:{zh:'綠豆'},cert:null},{nm:{zh:'粉圓'},cert:null}]},
-  '奶香咖哩豬肉':{nm:{zh:'奶香咖哩豬肉'},cat:{zh:'主菜'},ings:[{nm:{zh:'豬前腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'紅蘿蔔'},cert:{zh:'產銷履歷'}}]},
-  '彩繪三絲':{nm:{zh:'彩繪三絲'},cat:{zh:'副菜'},ings:[{nm:{zh:'紅蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'芹菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'海帶絲'},cert:null},{nm:{zh:'豆干絲'},cert:null}]},
-  '鹽燒雞肉':{nm:{zh:'鹽燒雞肉'},cat:{zh:'副菜'},ings:[{nm:{zh:'帶皮雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'杏鮑菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大頭菜'},cert:{zh:'溯源農糧產品'}}]},
-  '古早味雞翅':{nm:{zh:'古早味雞翅'},cat:{zh:'主菜'},ings:[{nm:{zh:'三節翅'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
-  '海芽雞湯':{nm:{zh:'海芽雞湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'三節翅'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'裙帶菜'},cert:null},{nm:{zh:'嫩薑'},cert:null}]},
-  '金榜油飯':{nm:{zh:'金榜油飯'},cat:{zh:'主食'},ings:[{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'紅蔥頭'},cert:null},{nm:{zh:'乾香菇'},cert:null},{nm:{zh:'白粳糯米'},cert:null},{nm:{zh:'蝦米'},cert:null}]},
-  '滷蛋豆干':{nm:{zh:'滷蛋豆干'},cat:{zh:'副菜'},ings:[{nm:{zh:'黑豆干'},cert:null},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'雞水煮蛋'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'嫩薑'},cert:null}]},
-  '田園時蔬':{nm:{zh:'田園時蔬'},cat:{zh:'副菜'},ings:[{nm:{zh:'花胡瓜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍青花菜'},cert:{zh:'產銷履歷'}},{nm:{zh:'甜玉米'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍花椰菜'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'大蒜'},cert:null}]},
-  '薏仁飯':{nm:{zh:'薏仁飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'洋薏仁'},cert:null}]},
-  '蔥味魚條':{nm:{zh:'蔥味魚條'},cat:{zh:'副菜'},ings:[{nm:{zh:'虱目魚(去皮)'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'蔥'},cert:null}]},
-  '美式洋蔥炒豬':{nm:{zh:'美式洋蔥炒豬'},cat:{zh:'主菜'},ings:[{nm:{zh:'甜椒(黃皮)'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'洋蔥'},cert:{zh:'產銷履歷'}},{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
-  '油菜':{nm:{zh:'油菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'油菜'},cert:{zh:'產銷履歷'}}]},
-  '白飯':{nm:{zh:'白飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},
-  '山藥排骨湯':{nm:{zh:'山藥排骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'山藥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'龍骨'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'枸杞'},cert:null}]},
-  '柴魚蒸蛋':{nm:{zh:'柴魚蒸蛋'},cat:{zh:'副菜'},ings:[{nm:{zh:'柴魚片'},cert:null},{nm:{zh:'液蛋(加工)'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
-  '金菇什錦羹':{nm:{zh:'金菇什錦羹'},cat:{zh:'副菜'},ings:[{nm:{zh:'大白菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'金針菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆皮'},cert:null}]},
-  '豆豉燒雞':{nm:{zh:'豆豉燒雞'},cat:{zh:'主菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆豉'},cert:null},{nm:{zh:'雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
-  '有機白米飯':{nm:{zh:'有機白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'臺灣有機農產品'}}]},
-  '有機小松菜':{nm:{zh:'有機小松菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'小松菜'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'蒜仁'},cert:null},{nm:{zh:'老薑'},cert:null}]},
-  '黃芽大骨湯':{nm:{zh:'黃芽大骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'黃豆芽'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大骨'},cert:{zh:'臺灣優良農產品(CAS)'}}]},
-  '滷蛋油腐':{nm:{zh:'滷蛋油腐'},cat:{zh:'副菜'},ings:[{nm:{zh:'雞蛋'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'油豆腐'},cert:null}]},
-  '蔥油雞':{nm:{zh:'蔥油雞'},cat:{zh:'主菜'},ings:[{nm:{zh:'雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'青蔥'},cert:null},{nm:{zh:'骨腿'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蠔菇'},cert:{zh:'臺灣有機農產品'}}]},
+const CITY_MENUS={
+'臺北市':{date:'2025/05/13',pick:['金榜油飯','奶香咖哩豬肉','青江菜','海芽雞湯'],dishes:{'白米飯':{nm:{zh:'白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'青江菜':{nm:{zh:'青江菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'青江菜'},cert:{zh:'產銷履歷'}}]},'綠豆粉圓':{nm:{zh:'綠豆粉圓'},cat:{zh:'湯品'},ings:[{nm:{zh:'綠豆'},cert:null},{nm:{zh:'粉圓'},cert:null}]},'奶香咖哩豬肉':{nm:{zh:'奶香咖哩豬肉'},cat:{zh:'主菜'},ings:[{nm:{zh:'豬前腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'紅蘿蔔'},cert:{zh:'產銷履歷'}}]},'彩繪三絲':{nm:{zh:'彩繪三絲'},cat:{zh:'副菜'},ings:[{nm:{zh:'紅蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'芹菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'海帶絲'},cert:null},{nm:{zh:'豆干絲'},cert:null}]},'鹽燒雞肉':{nm:{zh:'鹽燒雞肉'},cat:{zh:'副菜'},ings:[{nm:{zh:'帶皮雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'杏鮑菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大頭菜'},cert:{zh:'溯源農糧產品'}}]},'古早味雞翅':{nm:{zh:'古早味雞翅'},cat:{zh:'主菜'},ings:[{nm:{zh:'三節翅'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'海芽雞湯':{nm:{zh:'海芽雞湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'三節翅'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'裙帶菜'},cert:null},{nm:{zh:'嫩薑'},cert:null}]},'金榜油飯':{nm:{zh:'金榜油飯'},cat:{zh:'主食'},ings:[{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'紅蔥頭'},cert:null},{nm:{zh:'乾香菇'},cert:null},{nm:{zh:'白粳糯米'},cert:null},{nm:{zh:'蝦米'},cert:null}]},'滷蛋豆干':{nm:{zh:'滷蛋豆干'},cat:{zh:'副菜'},ings:[{nm:{zh:'黑豆干'},cert:null},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'雞水煮蛋'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'嫩薑'},cert:null}]},'田園時蔬':{nm:{zh:'田園時蔬'},cat:{zh:'副菜'},ings:[{nm:{zh:'花胡瓜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍青花菜'},cert:{zh:'產銷履歷'}},{nm:{zh:'甜玉米'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍花椰菜'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'大蒜'},cert:null}]},'薏仁飯':{nm:{zh:'薏仁飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'洋薏仁'},cert:null}]},'蔥味魚條':{nm:{zh:'蔥味魚條'},cat:{zh:'副菜'},ings:[{nm:{zh:'虱目魚(去皮)'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'蔥'},cert:null}]},'美式洋蔥炒豬':{nm:{zh:'美式洋蔥炒豬'},cat:{zh:'主菜'},ings:[{nm:{zh:'甜椒(黃皮)'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'洋蔥'},cert:{zh:'產銷履歷'}},{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'油菜':{nm:{zh:'油菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'油菜'},cert:{zh:'產銷履歷'}}]},'白飯':{nm:{zh:'白飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'山藥排骨湯':{nm:{zh:'山藥排骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'山藥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'龍骨'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'枸杞'},cert:null}]},'柴魚蒸蛋':{nm:{zh:'柴魚蒸蛋'},cat:{zh:'副菜'},ings:[{nm:{zh:'柴魚片'},cert:null},{nm:{zh:'液蛋(加工)'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'金菇什錦羹':{nm:{zh:'金菇什錦羹'},cat:{zh:'副菜'},ings:[{nm:{zh:'大白菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'金針菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆皮'},cert:null}]},'豆豉燒雞':{nm:{zh:'豆豉燒雞'},cat:{zh:'主菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆豉'},cert:null},{nm:{zh:'雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'有機白米飯':{nm:{zh:'有機白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'臺灣有機農產品'}}]},'有機小松菜':{nm:{zh:'有機小松菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'小松菜'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'蒜仁'},cert:null},{nm:{zh:'老薑'},cert:null}]},'黃芽大骨湯':{nm:{zh:'黃芽大骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'黃豆芽'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大骨'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'滷蛋油腐':{nm:{zh:'滷蛋油腐'},cat:{zh:'副菜'},ings:[{nm:{zh:'雞蛋'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'油豆腐'},cert:null}]},'蔥油雞':{nm:{zh:'蔥油雞'},cat:{zh:'主菜'},ings:[{nm:{zh:'雞胸肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'青蔥'},cert:null},{nm:{zh:'骨腿'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蠔菇'},cert:{zh:'臺灣有機農產品'}}]},},schools:[{nm:{zh:'松山區介壽國中'},dist:{zh:'松山區'},menu:['白米飯','青江菜','綠豆粉圓','奶香咖哩豬肉','彩繪三絲','鹽燒雞肉','古早味雞翅','海芽雞湯','金榜油飯','滷蛋豆干','田園時蔬']},{nm:{zh:'松山區民生國中'},dist:{zh:'松山區'},menu:['薏仁飯','青江菜','蔥味魚條','海芽雞湯','美式洋蔥炒豬','田園時蔬']},{nm:{zh:'松山區中山國中'},dist:{zh:'松山區'},menu:['油菜','白飯','山藥排骨湯','柴魚蒸蛋','金菇什錦羹','豆豉燒雞']},{nm:{zh:'松山區敦化國中'},dist:{zh:'松山區'},menu:['白米飯','青江菜','綠豆粉圓','奶香咖哩豬肉','彩繪三絲','鹽燒雞肉','古早味雞翅','海芽雞湯','金榜油飯','滷蛋豆干','田園時蔬']},{nm:{zh:'松山區松山國小'},dist:{zh:'松山區'},menu:['有機白米飯','有機小松菜','黃芽大骨湯','滷蛋油腐','蔥油雞']},]},
+'臺中市':{date:'2025/05/06',pick:['五穀飯','咖哩肉片','青江菜','筍片排骨湯'],dishes:{'五穀飯':{nm:{zh:'五穀飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'五穀米'},cert:null}]},'田園四色':{nm:{zh:'田園四色'},cat:{zh:'副菜'},ings:[{nm:{zh:'冷凍玉米粒'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'芋頭'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'雞絞肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'青江菜':{nm:{zh:'青江菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'青江菜'},cert:{zh:'產銷履歷'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'蒲燒魚腹':{nm:{zh:'蒲燒魚腹'},cat:{zh:'主菜'},ings:[{nm:{zh:'鬍鯰'},cert:{zh:'溯源水產品'}}]},'鐵板炒肉絲':{nm:{zh:'鐵板炒肉絲'},cat:{zh:'副菜'},ings:[{nm:{zh:'豬前腿肉'},cert:{zh:'國產生鮮豬肉追溯碼'}},{nm:{zh:'杏鮑菇'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'筍片排骨湯':{nm:{zh:'筍片排骨湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'麻竹筍干'},cert:null},{nm:{zh:'胡蘿蔔'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'豬軟骨'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'糙米飯':{nm:{zh:'糙米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'糙粳米'},cert:null}]},'鐵路豬排':{nm:{zh:'鐵路豬排'},cat:{zh:'主菜'},ings:[{nm:{zh:'豬大里肌'},cert:{zh:'國產生鮮豬肉追溯碼'}}]},'冬瓜腐皮湯':{nm:{zh:'冬瓜腐皮湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'冬瓜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豆腐皮'},cert:null}]},'季豆干片':{nm:{zh:'季豆干片'},cat:{zh:'副菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'冷凍菜豆(莢)'},cert:null},{nm:{zh:'豆干'},cert:null},{nm:{zh:'杏鮑菇'},cert:{zh:'臺灣有機農產品'}}]},'筍片雞丁':{nm:{zh:'筍片雞丁'},cat:{zh:'副菜'},ings:[{nm:{zh:'麻竹筍'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'清腿'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'木耳'},cert:{zh:'臺灣有機農產品'}}]},'莧菜':{nm:{zh:'莧菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'白莧菜'},cert:{zh:'溯源農糧產品'}}]},'燕麥飯':{nm:{zh:'燕麥飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'燕麥'},cert:null}]},'彩椒魷魚丸':{nm:{zh:'彩椒魷魚丸'},cat:{zh:'副菜'},ings:[{nm:{zh:'甜椒'},cert:{zh:'產銷履歷'}},{nm:{zh:'魷魚丸'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'蒜泥白肉':{nm:{zh:'蒜泥白肉'},cat:{zh:'主菜'},ings:[{nm:{zh:'綠豆芽'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豬前腿外腱肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'火鍋肉片(豬前腿)'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'大麥仁飯':{nm:{zh:'大麥仁飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'大麥仁'},cert:null}]},'味噌海芽湯':{nm:{zh:'味噌海芽湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'冷凍玉米粒'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'白洋葱'},cert:{zh:'溯源農糧產品'}}]},'什錦鮮蔬':{nm:{zh:'什錦鮮蔬'},cat:{zh:'副菜'},ings:[{nm:{zh:'金針菇'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'白洋葱'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'香菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'有機高麗菜'},cert:{zh:'臺灣有機農產品'}}]},'蚵仔白菜':{nm:{zh:'蚵仔白菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'蚵仔白菜'},cert:{zh:'產銷履歷'}}]},'油菜':{nm:{zh:'油菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'油菜'},cert:{zh:'產銷履歷'}}]},'滷味拼盤':{nm:{zh:'滷味拼盤'},cat:{zh:'副菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'甜玉米'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'火鍋條'},cert:null},{nm:{zh:'海帶結'},cert:null}]},'咖哩肉片':{nm:{zh:'咖哩肉片'},cat:{zh:'主菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'豬前腿外腱肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'白洋葱'},cert:{zh:'溯源農糧產品'}}]},'高麗燉雞湯':{nm:{zh:'高麗燉雞湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'甘藍'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'骨腿'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'蛋酥白菜':{nm:{zh:'蛋酥白菜'},cat:{zh:'副菜'},ings:[{nm:{zh:'金針菇'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'木耳'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'雞蛋'},cert:{zh:'洗選鮮蛋噴印溯源'}},{nm:{zh:'結球白菜'},cert:{zh:'溯源農糧產品'}}]},'青江菜1':{nm:{zh:'青江菜1'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'青江菜'},cert:{zh:'產銷履歷'}}]},'粉絲上樹':{nm:{zh:'粉絲上樹'},cat:{zh:'副菜'},ings:[{nm:{zh:'豬絞肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'甘藍'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'木耳'},cert:{zh:'臺灣有機農產品'}}]},'麥香雞肉排':{nm:{zh:'麥香雞肉排'},cat:{zh:'副菜'},ings:[{nm:{zh:'冷凍雞排'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'青菜蛋花湯':{nm:{zh:'青菜蛋花湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'雞蛋'},cert:{zh:'洗選鮮蛋噴印溯源'}},{nm:{zh:'小白菜'},cert:{zh:'產銷履歷'}}]},'大阪燒豚肉片':{nm:{zh:'大阪燒豚肉片'},cat:{zh:'主菜'},ings:[{nm:{zh:'豬里肌肉'},cert:{zh:'國產生鮮豬肉追溯碼'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}}]},'紫米飯':{nm:{zh:'紫米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'黑秈糯米'},cert:null}]},'鳳梨雞湯':{nm:{zh:'鳳梨雞湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'骨腿'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'有機黑葉白菜':{nm:{zh:'有機黑葉白菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'有機黑葉白菜'},cert:{zh:'臺灣有機農產品'}}]},'田園三劍客':{nm:{zh:'田園三劍客'},cat:{zh:'副菜'},ings:[{nm:{zh:'地瓜薯條'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'馬鈴薯條'},cert:null},{nm:{zh:'芋頭'},cert:{zh:'溯源農糧產品'}}]},'栗子白菜':{nm:{zh:'栗子白菜'},cat:{zh:'副菜'},ings:[{nm:{zh:'結球白菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'木耳'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'金針菇'},cert:{zh:'溯源農糧產品'}}]},'滷味拼水晶餃':{nm:{zh:'滷味拼水晶餃'},cat:{zh:'副菜'},ings:[{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍水晶餃'},cert:null},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'甜玉米'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'火鍋條'},cert:null},{nm:{zh:'海帶結'},cert:null}]},},schools:[{nm:{zh:'豐原區豐原國中'},dist:{zh:'豐原區'},menu:['五穀飯','田園四色','青江菜','蒲燒魚腹','鐵板炒肉絲','筍片排骨湯','糙米飯','鐵路豬排','冬瓜腐皮湯','季豆干片','筍片雞丁','莧菜']},{nm:{zh:'豐原區豐東國中'},dist:{zh:'豐原區'},menu:['燕麥飯','田園四色','青江菜','蒲燒魚腹','鐵板炒肉絲','筍片排骨湯','彩椒魷魚丸','蒜泥白肉','大麥仁飯','味噌海芽湯','什錦鮮蔬','蚵仔白菜','油菜','滷味拼盤']},{nm:{zh:'豐原區豐南國中'},dist:{zh:'豐原區'},menu:['五穀飯','田園四色','青江菜','蒲燒魚腹','鐵板炒肉絲','筍片排骨湯','青江菜1','粉絲上樹','麥香雞肉排','青菜蛋花湯','大阪燒豚肉片']},{nm:{zh:'潭子區潭子國中'},dist:{zh:'潭子區'},menu:['油菜','滷味拼盤','咖哩肉片','高麗燉雞湯','蛋酥白菜','燕麥飯','紫米飯','蒜泥白肉','鳳梨雞湯','有機黑葉白菜','田園三劍客','栗子白菜']},{nm:{zh:'大雅區大雅國中'},dist:{zh:'大雅區'},menu:['五穀飯','田園四色','青江菜','蒲燒魚腹','鐵板炒肉絲','筍片排骨湯','油菜','咖哩肉片','高麗燉雞湯','滷味拼水晶餃','蛋酥白菜','燕麥飯','紫米飯','蒜泥白肉']},]},
+'臺南市':{date:'2025/05/07',pick:['燕麥飯','紅燒豬肉','蒜香空心菜','冬瓜檸檬'],dishes:{'燕麥飯':{nm:{zh:'燕麥飯'},cat:{zh:'主食'},ings:[{nm:{zh:'燕麥'},cert:null},{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'蒜炒高麗菜':{nm:{zh:'蒜炒高麗菜'},cat:{zh:'副菜'},ings:[{nm:{zh:'高麗菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蒜末'},cert:null}]},'絲瓜蛤蜊湯':{nm:{zh:'絲瓜蛤蜊湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'絲瓜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蛤蜊'},cert:{zh:'溯源水產品'}},{nm:{zh:'薑絲'},cert:null}]},'糖醋旗魚':{nm:{zh:'糖醋旗魚'},cat:{zh:'主菜'},ings:[{nm:{zh:'木耳'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蔥'},cert:null},{nm:{zh:'鳳梨'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'白肉旗魚'},cert:{zh:'溯源水產品'}},{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}}]},'黑胡椒拌毛豆莢':{nm:{zh:'黑胡椒拌毛豆莢'},cat:{zh:'副菜'},ings:[{nm:{zh:'毛豆'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'蒜末'},cert:null}]},'米飯':{nm:{zh:'米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'蒜香空心菜':{nm:{zh:'蒜香空心菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'蒜末'},cert:null},{nm:{zh:'有機空心菜'},cert:{zh:'臺灣有機農產品'}}]},'冬瓜檸檬':{nm:{zh:'冬瓜檸檬'},cat:{zh:'湯品'},ings:[{nm:{zh:'檸檬汁'},cert:null},{nm:{zh:'冰塊'},cert:null},{nm:{zh:'粉圓'},cert:null},{nm:{zh:'冬瓜糖磚'},cert:null}]},'百香果':{nm:{zh:'百香果'},cat:{zh:'附餐'},ings:[{nm:{zh:'百香果'},cert:{zh:'溯源農糧產品'}}]},'香酥魚柳':{nm:{zh:'香酥魚柳'},cat:{zh:'主菜'},ings:[{nm:{zh:'虱目魚(去皮)'},cert:{zh:'溯源水產品'}}]},'蛋燴豆腐':{nm:{zh:'蛋燴豆腐'},cat:{zh:'副菜'},ings:[{nm:{zh:'雞蛋'},cert:{zh:'洗選鮮蛋噴印溯源'}},{nm:{zh:'紅蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'板豆腐'},cert:null},{nm:{zh:'金針菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蒜末'},cert:null}]},'洋蔥炒蛋':{nm:{zh:'洋蔥炒蛋'},cat:{zh:'副菜'},ings:[{nm:{zh:'洋蔥'},cert:{zh:'產銷履歷'}},{nm:{zh:'蔥'},cert:null},{nm:{zh:'雞蛋'},cert:{zh:'洗選鮮蛋噴印溯源'}}]},'糙米飯':{nm:{zh:'糙米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:null},{nm:{zh:'糙米'},cert:null}]},'古早味肉燥':{nm:{zh:'古早味肉燥'},cat:{zh:'主菜'},ings:[{nm:{zh:'乾香菇'},cert:null},{nm:{zh:'紅蔥頭'},cert:null},{nm:{zh:'大蒜'},cert:null},{nm:{zh:'絞肉'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'有機黑葉白菜':{nm:{zh:'有機黑葉白菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'黑葉白菜'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'大蒜'},cert:null}]},'蘿蔔皇帝豆湯':{nm:{zh:'蘿蔔皇帝豆湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'皇帝豆'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'香菜'},cert:null}]},'白米飯':{nm:{zh:'白米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'筍絲肉絲湯':{nm:{zh:'筍絲肉絲湯'},cat:{zh:'湯品'},ings:[{nm:{zh:'豬後腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'脆筍'},cert:null},{nm:{zh:'肉絲'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'竹筍'},cert:{zh:'溯源農糧產品'}}]},'紅燒豬肉':{nm:{zh:'紅燒豬肉'},cat:{zh:'主菜'},ings:[{nm:{zh:'白蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豬前腿肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'紅蘿蔔'},cert:{zh:'溯源農糧產品'}}]},'白米飯(素)':{nm:{zh:'白米飯(素)'},cat:{zh:'副菜'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'油菜(素)':{nm:{zh:'油菜(素)'},cat:{zh:'副菜'},ings:[{nm:{zh:'油菜'},cert:{zh:'產銷履歷'}}]},'豆薯炒蛋(素)':{nm:{zh:'豆薯炒蛋(素)'},cat:{zh:'副菜'},ings:[{nm:{zh:'豆薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'雞蛋'},cert:{zh:'雞蛋溯源標籤'}}]},'繽紛彩蔬(素)':{nm:{zh:'繽紛彩蔬(素)'},cat:{zh:'副菜'},ings:[{nm:{zh:'黑豆干'},cert:null}]},'南瓜蔬菜湯(素)':{nm:{zh:'南瓜蔬菜湯(素)'},cat:{zh:'副菜'},ings:[{nm:{zh:'南瓜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'甘藍'},cert:{zh:'溯源農糧產品'}}]},'鮮菇大白菜':{nm:{zh:'鮮菇大白菜'},cat:{zh:'主菜'},ings:[{nm:{zh:'結球白菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'香菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'大白菜'},cert:{zh:'溯源農糧產品'}}]},'義美保久乳':{nm:{zh:'義美保久乳'},cat:{zh:'附餐'},ings:[{nm:{zh:'全脂保久乳'},cert:null}]},'黑葉白菜':{nm:{zh:'黑葉白菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'黑葉白菜'},cert:{zh:'臺灣有機農產品'}}]},'香菇花生麵泡(素)':{nm:{zh:'香菇花生麵泡(素)'},cat:{zh:'副菜'},ings:[{nm:{zh:'香菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'麵筋'},cert:null},{nm:{zh:'水煮花生'},cert:null}]},'馬鈴薯雞片':{nm:{zh:'馬鈴薯雞片'},cat:{zh:'主菜'},ings:[{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'雞里肌肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'雞胸肉'},cert:{zh:'禽肉屠宰衛生檢查合格標誌追溯條碼'}}]},'白飯':{nm:{zh:'白飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}}]},'產銷履歷耐隆菜':{nm:{zh:'產銷履歷耐隆菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'蚵仔白菜'},cert:{zh:'產銷履歷'}}]},'全脂保久乳':{nm:{zh:'全脂保久乳'},cat:{zh:'附餐'},ings:[{nm:{zh:'全脂保久乳'},cert:null}]},'鮮筍湯飯':{nm:{zh:'鮮筍湯飯'},cat:{zh:'主菜'},ings:[{nm:{zh:'麻竹筍'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'梅花肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'鮮香菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'鴻喜菇'},cert:{zh:'臺灣有機農產品'}},{nm:{zh:'鮮木耳'},cert:{zh:'溯源農糧產品'}}]},'金金蒸蛋':{nm:{zh:'金金蒸蛋'},cat:{zh:'副菜'},ings:[{nm:{zh:'雞蛋'},cert:{zh:'洗選鮮蛋噴印溯源'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}}]},'香軟起司':{nm:{zh:'香軟起司'},cat:{zh:'附餐'},ings:[{nm:{zh:'麵包'},cert:null}]},'新北市黑豆漿':{nm:{zh:'新北市黑豆漿'},cat:{zh:'附餐'},ings:[{nm:{zh:'豆漿'},cert:{zh:'產銷履歷'}}]},},schools:[{nm:{zh:'七股區私立昭明國中(代用)'},dist:{zh:'七股區'},menu:['燕麥飯','蒜炒高麗菜','絲瓜蛤蜊湯','糖醋旗魚','黑胡椒拌毛豆莢']},{nm:{zh:'仁德區仁德國中'},dist:{zh:'仁德區'},menu:['米飯','蒜香空心菜','冬瓜檸檬','百香果','香酥魚柳','蛋燴豆腐']},{nm:{zh:'關廟區關廟國中'},dist:{zh:'關廟區'},menu:['洋蔥炒蛋','糙米飯','古早味肉燥','有機黑葉白菜','蘿蔔皇帝豆湯']},{nm:{zh:'永康區永康國中'},dist:{zh:'永康區'},menu:['白米飯','筍絲肉絲湯','紅燒豬肉','白米飯(素)','油菜(素)','豆薯炒蛋(素)','繽紛彩蔬(素)','南瓜蔬菜湯(素)','鮮菇大白菜','義美保久乳','黑葉白菜','香菇花生麵泡(素)','馬鈴薯雞片','白飯']},{nm:{zh:'龍崎區龍崎國中'},dist:{zh:'龍崎區'},menu:['白米飯','鮮筍湯飯','金金蒸蛋','香軟起司','新北市黑豆漿']},]},
+'高雄市':{date:'2025/05/07',pick:['什錦湯麵','蘑菇鐵板麵','豆皮青江菜','芋頭西米露'],dishes:{'米飯':{nm:{zh:'米飯'},cat:{zh:'主食'},ings:[{nm:{zh:'大豆油'},cert:null},{nm:{zh:'粳米'},cert:{zh:'產銷履歷'}},{nm:{zh:'醬油'},cert:null}]},'芋頭西米露':{nm:{zh:'芋頭西米露'},cat:{zh:'湯品'},ings:[{nm:{zh:'全脂奶粉'},cert:null},{nm:{zh:'椰漿'},cert:null},{nm:{zh:'芋頭'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'西谷米'},cert:null},{nm:{zh:'冰塊'},cert:null},{nm:{zh:'紅砂糖'},cert:null}]},'五彩繽紛':{nm:{zh:'五彩繽紛'},cat:{zh:'副菜'},ings:[{nm:{zh:'胡蘿蔔'},cert:null},{nm:{zh:'西洋芹菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'青蔥'},cert:null},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'玉米粒'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'木耳'},cert:{zh:'溯源農糧產品'}}]},'梅乾菜燒肉':{nm:{zh:'梅乾菜燒肉'},cat:{zh:'主菜'},ings:[{nm:{zh:'豬後腿外腱肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'梅乾菜'},cert:null},{nm:{zh:'青蔥'},cert:null},{nm:{zh:'白蘿蔔'},cert:null}]},'豆皮青江菜':{nm:{zh:'豆皮青江菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'豆皮絲'},cert:null},{nm:{zh:'青江菜'},cert:{zh:'產銷履歷'}},{nm:{zh:'蒜末'},cert:null}]},'旺仔小饅頭':{nm:{zh:'旺仔小饅頭'},cat:{zh:'附餐'},ings:[{nm:{zh:'小饅頭餅乾'},cert:null}]},'醬燒豬排':{nm:{zh:'醬燒豬排'},cat:{zh:'主菜'},ings:[{nm:{zh:'大排'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'滑蛋瘦肉粥':{nm:{zh:'滑蛋瘦肉粥'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:{zh:'產銷履歷'}},{nm:{zh:'青蔥'},cert:null},{nm:{zh:'高麗菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蛋'},cert:{zh:'產銷履歷'}},{nm:{zh:'玉米粒'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豬絞肉'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'玉米醬罐頭'},cert:null},{nm:{zh:'乾香菇'},cert:null}]},'黑糖捲':{nm:{zh:'黑糖捲'},cat:{zh:'副菜'},ings:[{nm:{zh:'黑糖銀絲卷'},cert:null}]},'枸杞小白菜':{nm:{zh:'枸杞小白菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'薑絲'},cert:null},{nm:{zh:'枸杞'},cert:null},{nm:{zh:'尼龍白菜'},cert:{zh:'產銷履歷'}}]},'蘑菇鐵板麵':{nm:{zh:'蘑菇鐵板麵'},cat:{zh:'主菜'},ings:[{nm:{zh:'洋蔥'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'素蘑菇醬'},cert:null},{nm:{zh:'青花菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'冷凍毛豆仁'},cert:{zh:'產銷履歷'}},{nm:{zh:'冷凍玉米粒'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'蒜末'},cert:null},{nm:{zh:'綠豆芽'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'肉絲(豬前腿)'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'洋菇罐頭'},cert:null}]},'香烤雞翅':{nm:{zh:'香烤雞翅'},cat:{zh:'副菜'},ings:[{nm:{zh:'燒烤雞翅'},cert:{zh:'臺灣優良農產品(CAS)'}}]},'牛排麵':{nm:{zh:'牛排麵'},cat:{zh:'主食'},ings:[{nm:{zh:'牛排麵(熟麵)'},cert:null}]},'鮮奶1':{nm:{zh:'鮮奶1'},cat:{zh:'附餐'},ings:[{nm:{zh:'全脂鮮乳'},cert:null}]},'什錦湯麵':{nm:{zh:'什錦湯麵'},cat:{zh:'主食'},ings:[{nm:{zh:'胡蘿蔔'},cert:{zh:'產銷履歷'}},{nm:{zh:'冷凍虱目魚丸'},cert:{zh:'溯源水產品'}},{nm:{zh:'甘藍'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'豬腹脇'},cert:{zh:'臺灣優良農產品(CAS)'}},{nm:{zh:'木耳'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'乾香菇'},cert:null},{nm:{zh:'柴魚片'},cert:null},{nm:{zh:'油蔥酥'},cert:null},{nm:{zh:'芹菜'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'油豆腐'},cert:null}]},'原味優酪乳':{nm:{zh:'原味優酪乳'},cat:{zh:'附餐'},ings:[{nm:{zh:'全脂濃稠發酵乳'},cert:null}]},'菠羅麵包':{nm:{zh:'菠羅麵包'},cat:{zh:'附餐'},ings:[{nm:{zh:'菠蘿麵包'},cert:null}]},'白飯':{nm:{zh:'白飯'},cat:{zh:'主食'},ings:[{nm:{zh:'白米'},cert:null}]},'紅燒海帶結':{nm:{zh:'紅燒海帶結'},cat:{zh:'副菜'},ings:[{nm:{zh:'海帶結'},cert:null},{nm:{zh:'辣椒'},cert:null},{nm:{zh:'胡蘿蔔'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'蒜仁'},cert:null},{nm:{zh:'鵪鶉蛋'},cert:{zh:'國產鵪鶉蛋溯源標籤'}},{nm:{zh:'豆輪'},cert:null}]},'珍珠愛玉冰':{nm:{zh:'珍珠愛玉冰'},cat:{zh:'湯品'},ings:[{nm:{zh:'粉圓'},cert:null},{nm:{zh:'衛生冰塊'},cert:null},{nm:{zh:'檸檬愛玉凍'},cert:null}]},'蒜香莧菜':{nm:{zh:'蒜香莧菜'},cat:{zh:'蔬菜'},ings:[{nm:{zh:'莧菜'},cert:{zh:'產銷履歷'}},{nm:{zh:'蒜仁'},cert:null}]},'加州李':{nm:{zh:'加州李'},cat:{zh:'附餐'},ings:[{nm:{zh:'加州李'},cert:null}]},'塔香干丁':{nm:{zh:'塔香干丁'},cat:{zh:'主菜'},ings:[{nm:{zh:'豆干'},cert:null},{nm:{zh:'馬鈴薯'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'杏鮑菇'},cert:{zh:'溯源農糧產品'}},{nm:{zh:'九層塔'},cert:{zh:'溯源農糧產品'}}]},},schools:[{nm:{zh:'小港區明義國中中安分校'},dist:{zh:'前鎮區'},menu:['米飯','芋頭西米露','五彩繽紛','梅乾菜燒肉','豆皮青江菜']},{nm:{zh:'燕巢區燕巢國小尖山分校'},dist:{zh:'燕巢區'},menu:['旺仔小饅頭','醬燒豬排','滑蛋瘦肉粥','黑糖捲','枸杞小白菜']},{nm:{zh:'阿蓮區阿蓮國小峰山分校'},dist:{zh:'阿蓮區'},menu:['蘑菇鐵板麵','香烤雞翅','牛排麵','鮮奶1']},{nm:{zh:'岡山區岡山國小灣裡分校'},dist:{zh:'岡山區'},menu:['什錦湯麵','原味優酪乳','菠羅麵包']},{nm:{zh:'鳳山區鳳山國中'},dist:{zh:'鳳山區'},menu:['白飯','紅燒海帶結','珍珠愛玉冰','蒜香莧菜','加州李','塔香干丁']},]},
 };
-const TODAY_PICK=['金榜油飯','奶香咖哩豬肉','青江菜','海芽雞湯'];
-const SCHOOLS=[
-  {nm:{zh:'松山區介壽國中'},dist:{zh:'松山區'},menu:['白米飯','青江菜','綠豆粉圓','奶香咖哩豬肉','彩繪三絲','鹽燒雞肉','古早味雞翅','海芽雞湯','金榜油飯','滷蛋豆干','田園時蔬']},
-  {nm:{zh:'松山區民生國中'},dist:{zh:'松山區'},menu:['薏仁飯','青江菜','蔥味魚條','海芽雞湯','美式洋蔥炒豬','田園時蔬']},
-  {nm:{zh:'松山區中山國中'},dist:{zh:'松山區'},menu:['油菜','白飯','山藥排骨湯','柴魚蒸蛋','金菇什錦羹','豆豉燒雞']},
-  {nm:{zh:'松山區敦化國中'},dist:{zh:'松山區'},menu:['白米飯','青江菜','綠豆粉圓','奶香咖哩豬肉','彩繪三絲','鹽燒雞肉','古早味雞翅','海芽雞湯','金榜油飯','滷蛋豆干','田園時蔬']},
-  {nm:{zh:'松山區松山國小'},dist:{zh:'松山區'},menu:['有機白米飯','有機小松菜','黃芽大骨湯','滷蛋油腐','蔥油雞']},
-];
+function cm(){return CITY_MENUS[state.region.cZh]||null;}  // current city's menus, or null if no sample
 /* Real 農業部 data: all 35 edible crops with an October peak, from moa_061.json
    (UnitId=061; excludes 花卉 flowers and 茶 teas). Peak = contiguous month ranges. */
 const CROPS=[
@@ -515,13 +486,23 @@ function sampleFlag(){return `<div class="sample-flag">${IC.info}<span>${T[state
 function renderToday(){
   const t=T[state.lang];const weekend=DAYS[state.day].wd===0||DAYS[state.day].wd===6;
   const days=DAYS.map((d,i)=>`<button class="day" data-day="${i}" aria-pressed="${i===state.day}"><span>${L(d)}</span><b>${d.d}</b></button>`).join('');
+  const locBtn=`<button class="loc" data-pickregion><span class="pin">${IC.pin}</span>${regionLabel()}<span class="chev">${IC.chev}</span></button>`;
+  const seasonShortcut=`<button class="card pad row between" style="width:100%;text-align:left;border:1px solid var(--border)" data-go="season"><span class="row">${IC.leaf}<b>${t.toSeason.replace(' →','')}</b></span>${IC.chev}</button>`;
+  const city=cm();
+  if(!city){  // preview only has samples for a few cities
+    return `${sampleFlag()}
+    ${locBtn}
+    <div class="days">${days}</div>
+    <div class="card pad"><div class="empty">${IC.school}<span>${t.schoolsCityOnly}</span><button class="btn ghost sm" data-settaipei>${t.switchTaipei}</button></div></div>
+    ${seasonShortcut}`;
+  }
   let pick;
   if(weekend){
     pick=`<div class="card pad"><div class="row between"><div class="eyebrow">${t.weekend}</div></div>
       <p class="muted" style="margin:8px 0 14px">${t.weekendBody}</p>
       <button class="btn primary block" data-go="season">${t.toSeason}</button></div>`;
   }else{
-    const lines=TODAY_PICK.map(id=>{const d=DISHES[id];if(!d)return '';return `<div class="dishline"><span class="dot"></span><span class="nm">${L(d.nm)}</span><span class="tag">${L(d.cat)}</span></div>`;}).join('');
+    const lines=city.pick.map(id=>{const d=city.dishes[id];if(!d)return '';return `<div class="dishline"><span class="dot"></span><span class="nm">${L(d.nm)}</span><span class="tag">${L(d.cat)}</span></div>`;}).join('');
     pick=`<div class="card pick">
       <div class="pbar"></div>
       <div class="pick-body">
@@ -529,22 +510,14 @@ function renderToday(){
         <div class="dishgrid">${lines}</div>
       </div></div>`;
   }
-  if(state.region.cZh!=='臺北市'){  // preview only has 臺北市 school samples
-    return `${sampleFlag()}
-    <button class="loc" data-pickregion><span class="pin">${IC.pin}</span>${regionLabel()}<span class="chev">${IC.chev}</span></button>
-    <div class="days">${days}</div>
-    <div class="card pad"><div class="empty">${IC.school}<span>${t.schoolsCityOnly}</span><button class="btn ghost sm" data-settaipei>${t.switchTaipei}</button></div></div>
-    <button class="card pad row between" style="width:100%;text-align:left;border:1px solid var(--border)" data-go="season"><span class="row">${IC.leaf}<b>${t.toSeason.replace(' →','')}</b></span>${IC.chev}</button>`;
-  }
-  const schools=SCHOOLS.map((s,i)=>`<button class="li" data-school="${i}">
+  const schools=city.schools.map((s,i)=>`<button class="li" data-school="${i}">
       <span class="ic">${IC.school}</span>
       <span class="tx"><b>${L(s.nm)}</b><span>${L(s.dist)}</span></span>${IC.chev}</button>`).join('');
   return `${sampleFlag()}
-    <button class="loc" data-pickregion><span class="pin">${IC.pin}</span>${regionLabel()}<span class="chev">${IC.chev}</span></button>
+    ${locBtn}
     <div class="days">${days}</div>
     ${pick}
-    ${weekend?'':`<button class="card pad row between" style="width:100%;text-align:left;border:1px solid var(--border)" data-go="season">
-      <span class="row">${IC.leaf}<b>${t.toSeason.replace(' →','')}</b></span>${IC.chev}</button>`}
+    ${weekend?'':seasonShortcut}
     <h2 class="sec">${t.nearby}</h2>
     <div class="card pad"><div class="list">${schools}</div></div>`;
 }
@@ -624,13 +597,13 @@ function renderDetail(){
   const t=T[state.lang];const d=state.detail;
   const back=`<div class="detail-top"><button class="back">${IC.back}${t.tabs[state.tab]}</button></div>`;
   if(d.type==='school'){
-    const s=SCHOOLS[d.id];
-    const dishes=s.menu.map(id=>{const dd=DISHES[id];if(!dd)return '';
+    const city=cm(); const s=city.schools[d.id];
+    const dishes=s.menu.map(id=>{const dd=city.dishes[id];if(!dd)return '';
       const ings=dd.ings.map(ig=>`${L(ig.nm)}${ig.cert?` <span class="muted">·${L(ig.cert)}</span>`:''}`).join('、');
       return `<div class="li" style="cursor:default;align-items:flex-start">
         <span class="ic">${IC.pot}</span>
         <span class="tx"><b>${L(dd.nm)} <span class="badge corn" style="font-size:10px">${L(dd.cat)}</span></b><span>${ings||'—'}</span></span></div>`;}).join('');
-    return `${back}<h2 class="sec">${L(s.nm)}</h2><p class="muted" style="margin:0">${L(s.dist)} · ${MENU_DATE} · ${t.schoolMenu}</p>
+    return `${back}<h2 class="sec">${L(s.nm)}</h2><p class="muted" style="margin:0">${L(s.dist)} · ${city.date} · ${t.schoolMenu}</p>
       <div class="card pad"><div class="list">${dishes}</div></div>`;
   }
   if(d.type==='crop'){
