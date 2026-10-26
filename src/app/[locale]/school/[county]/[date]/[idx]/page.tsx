@@ -1,17 +1,17 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
-import { dayMenu } from '@/lib/schoolData';
+import { menuForDate } from '@/lib/schoolApi';
 
 export default async function SchoolPage({
   params,
 }: {
-  params: { locale: string; county: string; day: string; idx: string };
+  params: { locale: string; county: string; date: string; idx: string };
 }) {
   setRequestLocale(params.locale);
   const t = await getTranslations('today');
   const county = decodeURIComponent(params.county);
-  const menu = dayMenu(county, Number(params.day));
+  const menu = await menuForDate(county, params.date);
   const school = menu?.schools[Number(params.idx)];
   if (!menu || !school) notFound();
 

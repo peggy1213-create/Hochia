@@ -21,7 +21,10 @@
     "toSeason": "See what's in season",
     "noSchool": "No school lunch on weekends",
     "noSchoolBody": "Here's what's in season instead. Menus return on weekdays.",
-    "pickDate": "Choose a date"
+    "pickDate": "Choose a date",
+    "noRegion": "Choose a city to see nearby school lunches.",
+    "loading": "Loading…",
+    "noMenu": "No menu for this date yet — try another date or see what's in season."
   },
   "inSeason": {
     "title": "In Season",
@@ -94,6 +97,6 @@
   },
   "common": {
     "done": "Done",
-    "sample": "In Season is live Ministry of Agriculture data; school lunches are a sample (Taipei / Taichung / Tainan / Kaohsiung)."
+    "sample": "Data from the Ministry of Agriculture (In Season) and the School Catering platform (school lunches) — government open data."
   }
 }

@@ -5,7 +5,13 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { loadSettings } from '@/lib/userStore';
 import { findCounty } from '@/lib/regions';
-import { weekFor } from '@/lib/schoolData';
+
+type DayMenu = {
+  date: string;
+  pick: string[];
+  dishes: Record<string, { cat: string; ings: { name: string; cert: string | null }[] }>;
+  schools: { name: string; district: string; menu: string[] }[];
+};
 
 const WD_ZH = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
 const WD_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -20,6 +26,8 @@ export default function TodayClient() {
   const [countyZh, setCountyZh] = useState<string | undefined>(undefined);
   const [ready, setReady] = useState(false);
   const [iso, setIso] = useState('');
+  const [menu, setMenu] = useState<DayMenu | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setCountyZh(loadSettings().region?.countyZh);
@@ -27,16 +35,40 @@ export default function TodayClient() {
     setReady(true);
   }, []);
 
+  const wdIdx = iso ? (new Date(iso + 'T00:00:00').getDay() + 6) % 7 : 0;
+  const weekend = wdIdx >= 5;
+
+  useEffect(() => {
+    if (!ready || !countyZh || !iso || weekend) {
+      setMenu(null);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    fetch(`/api/menu?county=${encodeURIComponent(countyZh)}&date=${iso}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!cancelled) {
+          setMenu((d.menu as DayMenu) ?? null);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setMenu(null);
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, countyZh, iso, weekend]);
+
   if (!ready || !iso) return null;
 
-  const picked = new Date(iso + 'T00:00:00');
-  const wdIdx = (picked.getDay() + 6) % 7; // Monday = 0
   const wd = locale === 'en' ? WD_EN : WD_ZH;
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
-  const week = weekFor(countyZh);
-  const weekend = wdIdx >= 5;
-  const day = week && !weekend ? week[wdIdx] : null;
 
   const pill = (
     <Link
@@ -78,29 +110,85 @@ export default function TodayClient() {
     </Link>
   );
 
-  if (!week) {
-    return (
-      <div className="flex flex-col gap-3">
-        {pill}
-        {calendar}
-        <Link href="/region" className="card block p-6 text-center text-muted">
-          {t('cityOnly')} <span className="font-bold text-primary">{t('changeCity')}</span>
-        </Link>
-      </div>
+  let body: React.ReactNode;
+  if (!countyZh) {
+    body = (
+      <Link href="/region" className="card block p-6 text-center text-muted">
+        {t('noRegion')} <span className="font-bold text-primary">{t('changeCity')}</span>
+      </Link>
     );
-  }
-
-  if (weekend || !day) {
-    return (
-      <div className="flex flex-col gap-3">
-        {pill}
-        {calendar}
+  } else if (weekend) {
+    body = (
+      <>
         <div className="card p-4">
           <div className="eyebrow">{t('noSchool')}</div>
           <p className="mt-2 text-muted">{t('noSchoolBody')}</p>
         </div>
         {seasonShortcut}
-      </div>
+      </>
+    );
+  } else if (loading) {
+    body = <div className="card p-6 text-center text-muted">{t('loading')}</div>;
+  } else if (!menu) {
+    body = (
+      <>
+        <div className="card p-6 text-center text-muted">{t('noMenu')}</div>
+        {seasonShortcut}
+      </>
+    );
+  } else {
+    body = (
+      <>
+        <div className="card overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
+          <div className="p-4">
+            <div className="eyebrow">
+              {t('pickTitle')} · {t('pickWhy')}
+            </div>
+            <div className="mt-3 flex flex-col gap-2">
+              {menu.pick.map((n) => {
+                const d = menu.dishes[n];
+                if (!d) return null;
+                return (
+                  <div key={n} className="flex items-baseline gap-2.5">
+                    <span className="h-2 w-2 flex-none -translate-y-0.5 rounded-full bg-secondary" />
+                    <span className="font-bold">{n}</span>
+                    <span className="rounded-full bg-tint px-2.5 py-1 text-xs font-semibold">{d.cat}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {seasonShortcut}
+
+        <h2 className="text-lg font-extrabold">{t('nearby')}</h2>
+        <div className="card p-4">
+          <ul className="flex flex-col divide-y divide-border">
+            {menu.schools.map((s, i) => (
+              <li key={i}>
+                <Link
+                  href={`/school/${encodeURIComponent(countyZh)}/${iso}/${i}`}
+                  className="flex items-center gap-3 py-3.5"
+                >
+                  <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-tint text-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5" strokeLinejoin="round">
+                      <path d="M3 10l9-5 9 5-9 5Z" />
+                      <path d="M7 12v5c0 1 2 2 5 2s5-1 5-2v-5" />
+                    </svg>
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <b className="block">{s.name}</b>
+                    <span className="text-sm text-muted">{s.district}</span>
+                  </span>
+                  <span className="flex-none text-muted">›</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
     );
   }
 
@@ -108,56 +196,7 @@ export default function TodayClient() {
     <div className="flex flex-col gap-3">
       {pill}
       {calendar}
-
-      <div className="card overflow-hidden">
-        <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
-        <div className="p-4">
-          <div className="eyebrow">
-            {t('pickTitle')} · {t('pickWhy')}
-          </div>
-          <div className="mt-3 flex flex-col gap-2">
-            {day.pick.map((n) => {
-              const d = day.dishes[n];
-              if (!d) return null;
-              return (
-                <div key={n} className="flex items-baseline gap-2.5">
-                  <span className="h-2 w-2 flex-none -translate-y-0.5 rounded-full bg-secondary" />
-                  <span className="font-bold">{n}</span>
-                  <span className="rounded-full bg-tint px-2.5 py-1 text-xs font-semibold">{d.cat}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {seasonShortcut}
-
-      <h2 className="text-lg font-extrabold">{t('nearby')}</h2>
-      <div className="card p-4">
-        <ul className="flex flex-col divide-y divide-border">
-          {day.schools.map((s, i) => (
-            <li key={i}>
-              <Link
-                href={`/school/${encodeURIComponent(countyZh!)}/${wdIdx}/${i}`}
-                className="flex items-center gap-3 py-3.5"
-              >
-                <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-tint text-primary">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5" strokeLinejoin="round">
-                    <path d="M3 10l9-5 9 5-9 5Z" />
-                    <path d="M7 12v5c0 1 2 2 5 2s5-1 5-2v-5" />
-                  </svg>
-                </span>
-                <span className="min-w-0 flex-1">
-                  <b className="block">{s.name}</b>
-                  <span className="text-sm text-muted">{s.district}</span>
-                </span>
-                <span className="flex-none text-muted">›</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {body}
     </div>
   );
 }
