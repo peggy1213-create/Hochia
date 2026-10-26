@@ -231,6 +231,8 @@ const T = {
     pickWhy:'附近學校最常見的組合',
     toSeason:'看本月盛產 →',
     nearby:'附近學校午餐',
+    schoolsCityOnly:'本預覽的學校午餐資料僅含臺北市（示範）。',
+    switchTaipei:'切換到臺北市',
     cookAtHome:'在家煮',
     schoolMenu:'學校午餐',
     ingredients:'食材',
@@ -255,6 +257,7 @@ const T = {
     usedInDishes:'本週入菜',
     weekHeroEyebrow:'本週最多學校使用',
     weekList:'本週食材排行',
+    weekNote:'統計自臺北市 國中小 2025/05/12–16；食材分組為推估。',
     atSchools:n=>`${n} 所學校使用`,
     meShop:'購物清單',
     meFav:'我的最愛',
@@ -292,7 +295,7 @@ const T = {
     pickRegionTitle:'選擇縣市',
     pickRegionLead:'用於顯示附近學校與在地盛產。',
     counties:['基隆市','臺北市','新北市','桃園市','新竹市','新竹縣','苗栗縣','臺中市','彰化縣','南投縣','雲林縣','嘉義市','嘉義縣','臺南市','高雄市','屏東縣','宜蘭縣','花蓮縣','臺東縣','澎湖縣','金門縣','連江縣'],
-    districts:{'臺北市':['大安區','中正區','信義區','士林區']},
+    districts:{'臺北市':['松山區','大安區','中正區','信義區','士林區']},
   },
   'en':{
     tagline:'Good Eats',
@@ -304,6 +307,8 @@ const T = {
     pickWhy:'Most common combo at nearby schools',
     toSeason:"See what's in season →",
     nearby:'Nearby school lunches',
+    schoolsCityOnly:'This preview only includes school-lunch data for Taipei.',
+    switchTaipei:'Switch to Taipei',
     cookAtHome:'Cook at home',
     schoolMenu:'School lunch',
     ingredients:'Ingredients',
@@ -328,6 +333,7 @@ const T = {
     usedInDishes:'In dishes this week',
     weekHeroEyebrow:'Most-used by schools this week',
     weekList:'This week, ranked',
+    weekNote:'From Taipei junior & elementary schools, 2025/05/12–16; food group is estimated.',
     atSchools:n=>`Used by ${n} schools`,
     meShop:'Shopping list',
     meFav:'Favorites',
@@ -365,7 +371,7 @@ const T = {
     pickRegionTitle:'Choose city / county',
     pickRegionLead:'Used to show nearby schools and local produce.',
     counties:['Keelung','Taipei','New Taipei','Taoyuan','Hsinchu City','Hsinchu County','Miaoli','Taichung','Changhua','Nantou','Yunlin','Chiayi City','Chiayi County','Tainan','Kaohsiung','Pingtung','Yilan','Hualien','Taitung','Penghu','Kinmen','Lienchiang'],
-    districts:{'Taipei':["Da'an","Zhongzheng","Xinyi","Shilin"]},
+    districts:{'Taipei':["Songshan","Da'an","Zhongzheng","Xinyi","Shilin"]},
   }
 };
 
@@ -452,14 +458,18 @@ const CROPS=[
   {nm:{zh:'綠豆',en:'Mung bean'},alias:null,type:'grain',peak:'1、5–12',counties:{zh:'嘉義縣',en:'Chiayi'},cty:['嘉義縣'],inWeek:false,dishes:[]},
 ];
 const WEEK_ING=[
-  {nm:{zh:'甘藍',en:'Cabbage'},grp:'veg',schools:142,peak:true},
-  {nm:{zh:'雞蛋',en:'Eggs'},grp:'pro',schools:131,peak:false},
-  {nm:{zh:'豬後腿肉',en:'Pork leg'},grp:'pro',schools:118,peak:false},
-  {nm:{zh:'白蘿蔔',en:'Daikon radish'},grp:'veg',schools:96,peak:true},
-  {nm:{zh:'糙米',en:'Brown rice'},grp:'grain',schools:88,peak:false},
-  {nm:{zh:'青江菜',en:'Bok choy'},grp:'veg',schools:77,peak:false},
-  {nm:{zh:'豆腐',en:'Tofu'},grp:'pro',schools:64,peak:false},
-  {nm:{zh:'地瓜',en:'Sweet potato'},grp:'grain',schools:51,peak:true},
+  {nm:{zh:'洋蔥'},grp:'veg',schools:204,peak:false},
+  {nm:{zh:'白米'},grp:'grain',schools:198,peak:false},
+  {nm:{zh:'白蘿蔔'},grp:'veg',schools:185,peak:true},
+  {nm:{zh:'冷凍玉米粒'},grp:'grain',schools:160,peak:false},
+  {nm:{zh:'馬鈴薯'},grp:'grain',schools:160,peak:false},
+  {nm:{zh:'木耳'},grp:'veg',schools:153,peak:false},
+  {nm:{zh:'胡蘿蔔'},grp:'veg',schools:151,peak:true},
+  {nm:{zh:'雞蛋'},grp:'pro',schools:143,peak:false},
+  {nm:{zh:'金針菇'},grp:'veg',schools:142,peak:true},
+  {nm:{zh:'青江菜'},grp:'veg',schools:140,peak:false},
+  {nm:{zh:'蠔菇'},grp:'veg',schools:133,peak:false},
+  {nm:{zh:'黑葉白菜'},grp:'veg',schools:131,peak:false},
 ];
 
 /* ---------------- state ---------------- */
@@ -471,7 +481,7 @@ const state={
   region:null, diet:new Set(), setupStep:0, setupDone:false,
 };
 // default region (canonical zh for filtering + display strings per language)
-state.region={cZh:'臺北市',cEn:'Taipei',dZh:'大安區',dEn:"Da'an"};
+state.region={cZh:'臺北市',cEn:'Taipei',dZh:'松山區',dEn:"Songshan"};
 
 /* ---------------- helpers ---------------- */
 const el=(id)=>document.getElementById(id);
@@ -518,6 +528,13 @@ function renderToday(){
         <div class="eyebrow">${t.todayPickTitle} · ${t.pickWhy}</div>
         <div class="dishgrid">${lines}</div>
       </div></div>`;
+  }
+  if(state.region.cZh!=='臺北市'){  // preview only has 臺北市 school samples
+    return `${sampleFlag()}
+    <button class="loc" data-pickregion><span class="pin">${IC.pin}</span>${regionLabel()}<span class="chev">${IC.chev}</span></button>
+    <div class="days">${days}</div>
+    <div class="card pad"><div class="empty">${IC.school}<span>${t.schoolsCityOnly}</span><button class="btn ghost sm" data-settaipei>${t.switchTaipei}</button></div></div>
+    <button class="card pad row between" style="width:100%;text-align:left;border:1px solid var(--border)" data-go="season"><span class="row">${IC.leaf}<b>${t.toSeason.replace(' →','')}</b></span>${IC.chev}</button>`;
   }
   const schools=SCHOOLS.map((s,i)=>`<button class="li" data-school="${i}">
       <span class="ic">${IC.school}</span>
@@ -577,9 +594,10 @@ function renderWeek(){
       <div class="eyebrow" style="color:rgba(255,255,255,.85)">${t.weekHeroEyebrow}</div>
       <div class="k">${L(hero.nm)}</div>
       <div class="s">${t.atSchools(hero.schools)}</div>
-      <span class="hbadge">${state.lang==='en'?'In season now':'現正盛產'}</span>
+      ${hero.peak?`<span class="hbadge">${state.lang==='en'?'In season now':'現正盛產'}</span>`:''}
     </div>
     <h2 class="sec">${t.weekList}</h2>
+    <p class="muted" style="margin:0;font-size:var(--fs-sm)">${t.weekNote}</p>
     <div class="chips">${chips}</div>
     <div class="card pad"><div class="list">${rows}</div></div>`;
 }
@@ -668,6 +686,7 @@ function renderRegionPicker(){
 document.addEventListener('click',(e)=>{
   const tb=e.target.closest('.lang button'); if(tb){state.lang=tb.dataset.lang; if(!el('overlay').hidden){state.overlayMode==='region'?renderRegionPicker():renderSetup();} render(); return;}
   const pr=e.target.closest('[data-pickregion]'); if(pr){renderRegionPicker();return;}
+  const tp=e.target.closest('[data-settaipei]'); if(tp){state.region={cZh:'臺北市',cEn:'Taipei',dZh:'松山區',dEn:"Songshan"};render();return;}
   const pc=e.target.closest('[data-pickcounty]'); if(pc){const i=+pc.dataset.pickcounty;const cZh=T['zh-TW'].counties[i],cEn=T['en'].counties[i];const dZh=(T['zh-TW'].districts[cZh]||['—'])[0],dEn=(T['en'].districts[cEn]||['—'])[0];state.region={cZh,cEn,dZh,dEn};closeSetup();return;}
   const px=e.target.closest('[data-pickclose]'); if(px){closeSetup();return;}
   const tab=e.target.closest('.tab'); if(tab){state.tab=tab.dataset.tab;state.detail=null;render();return;}
