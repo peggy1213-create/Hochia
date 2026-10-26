@@ -1,0 +1,67 @@
+{
+  "header": {
+    "tagline": "Good Eats",
+    "language": "Language"
+  },
+  "nav": {
+    "today": "Today",
+    "inSeason": "In Season",
+    "thisWeek": "This Week",
+    "me": "Me"
+  },
+  "today": {
+    "title": "What to eat today",
+    "intro": "Today's dishes and ingredients from nearby school lunches, to help you decide.",
+    "comingSoon": "Today's pick, nearby school lunches and dish detail arrive in the features phase."
+  },
+  "inSeason": {
+    "title": "In Season",
+    "intro": "This month's peak-season produce, filterable to local or all of Taiwan.",
+    "comingSoon": "The in-season list and crop detail connect to Ministry of Agriculture open data."
+  },
+  "thisWeek": {
+    "title": "This Week",
+    "intro": "The ingredients most schools are using this week, filterable by food group.",
+    "comingSoon": "The ranking connects to the School Catering platform data."
+  },
+  "me": {
+    "title": "Me",
+    "settings": "Settings",
+    "region": "Region",
+    "servings": "Servings",
+    "diet": "Diet",
+    "dietNone": "No restriction",
+    "about": "About the data",
+    "sources": "Sources",
+    "updated": "Last updated",
+    "disclaimer": "Meal ideas only — not medical or nutritional advice.",
+    "src1": "School Catering Platform (Ministry of Education)",
+    "src2": "Monthly peak-season produce (Ministry of Agriculture)"
+  },
+  "setup": {
+    "welcomeTitle": "Welcome to Hochia",
+    "welcomeBody": "Decides what to eat each day — from lunch menus planned by school nutritionists across Taiwan, plus what's in peak season. No sign-up, no login.",
+    "chooseLanguage": "Choose a language",
+    "areaTitle": "Where are you?",
+    "areaBody": "Used to find nearby school menus and local produce.",
+    "prefsTitle": "How many, any restrictions?",
+    "prefsBody": "Recipe amounts scale to this, and today's pick avoids them.",
+    "next": "Next",
+    "start": "Start",
+    "skip": "Skip setup"
+  },
+  "diets": {
+    "veg": "Vegetarian",
+    "nobeef": "No beef",
+    "noseafood": "No seafood"
+  },
+  "region": {
+    "pickTitle": "Choose city / county",
+    "pickBody": "Used to show nearby schools and local produce.",
+    "change": "Change"
+  },
+  "common": {
+    "done": "Done",
+    "sample": "Preview: Phase 1 skeleton — features and data connect in later phases."
+  }
+}

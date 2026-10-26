@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-primary px-4 font-bold text-white hover:bg-[color:var(--primary-hover)];
+  }
+  .btn-ghost {
+    @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 font-bold text-ink;
+  }
+  .card {
+    @apply rounded-card border border-border bg-surface shadow-sm;
+  }
+  .chip {
+    @apply min-h-[38px] rounded-full border border-border bg-surface px-3.5 text-sm font-semibold text-muted;
+  }
+  .chip[aria-pressed='true'] {
+    @apply border-primary bg-primary text-white;
+  }
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-wider text-muted;
+  }
+}
+
+/* Palette B "菜市場 Market" — light-only brand palette.
+   White text only on --primary; carrot/corn always carry --ink text. */
+:root {
+  --ground: #F3F6EE;
+  --surface: #FFFFFF;
+  --tint: #E3EBDA;
+  --border: #D3DDC8;
+  --ink: #1C2A21;
+  --muted: #56655A;
+  --primary: #2F6B3F;
+  --primary-hover: #214D2D;
+  --secondary: #E07A2E; /* carrot */
+  --accent: #F2D16B;    /* corn */
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* keyboard focus ring */
+:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}

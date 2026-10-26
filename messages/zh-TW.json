@@ -1,0 +1,67 @@
+{
+  "header": {
+    "tagline": "好食",
+    "language": "語言"
+  },
+  "nav": {
+    "today": "今天",
+    "inSeason": "本月盛產",
+    "thisWeek": "本週食材",
+    "me": "我的"
+  },
+  "today": {
+    "title": "今天吃什麼",
+    "intro": "附近學校午餐的當日菜色與食材，幫你決定今天的一餐。",
+    "comingSoon": "今日推薦、附近學校午餐與菜色詳情將在功能階段接入。"
+  },
+  "inSeason": {
+    "title": "本月盛產",
+    "intro": "本月當季農產，可切換在地或全台灣。",
+    "comingSoon": "盛產清單與產地詳情將接入農業部開放資料。"
+  },
+  "thisWeek": {
+    "title": "本週食材",
+    "intro": "本週最多學校使用的食材排行，可依食材分組篩選。",
+    "comingSoon": "食材排行將接入校園食材登錄平臺資料。"
+  },
+  "me": {
+    "title": "我的",
+    "settings": "設定",
+    "region": "地區",
+    "servings": "份數",
+    "diet": "飲食偏好",
+    "dietNone": "無限制",
+    "about": "關於資料",
+    "sources": "資料來源",
+    "updated": "最後更新",
+    "disclaimer": "只是用餐靈感，非醫療或營養建議。",
+    "src1": "校園食材登錄平臺（教育部國教署）",
+    "src2": "每月盛產農產品產地（農業部農糧署）"
+  },
+  "setup": {
+    "welcomeTitle": "歡迎使用 Hochia 好食",
+    "welcomeBody": "每天幫你決定「今天吃什麼」——用全台學校營養師排的午餐菜單，加上當季盛產食材。免註冊、免登入。",
+    "chooseLanguage": "先選語言",
+    "areaTitle": "你在哪裡？",
+    "areaBody": "用來找附近學校的菜單與在地盛產。",
+    "prefsTitle": "幾個人吃、有忌口嗎？",
+    "prefsBody": "食譜份量會依此調整，今天的推薦也會避開。",
+    "next": "下一步",
+    "start": "開始",
+    "skip": "略過設定"
+  },
+  "diets": {
+    "veg": "素食",
+    "nobeef": "不吃牛",
+    "noseafood": "不吃海鮮"
+  },
+  "region": {
+    "pickTitle": "選擇縣市",
+    "pickBody": "用於顯示附近學校與在地盛產。",
+    "change": "變更"
+  },
+  "common": {
+    "done": "完成",
+    "sample": "示範版：Phase 1 骨架，功能與資料將於後續階段接入。"
+  }
+}
