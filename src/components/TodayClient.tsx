@@ -7,26 +7,49 @@ import { loadSettings } from '@/lib/userStore';
 import { findCounty } from '@/lib/regions';
 import { menusForCounty } from '@/lib/schoolData';
 
+const WD_ZH = ['一', '二', '三', '四', '五', '六', '日'];
+const WD_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+function weekDays() {
+  const today = new Date();
+  const dow = (today.getDay() + 6) % 7; // Monday = 0
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - dow);
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return { idx: i, date: d.getDate(), weekend: i >= 5 };
+  });
+  return { days, todayIdx: dow };
+}
+
 export default function TodayClient() {
   const t = useTranslations('today');
   const locale = useLocale();
   const [countyZh, setCountyZh] = useState<string | undefined>(undefined);
   const [ready, setReady] = useState(false);
+  const [sel, setSel] = useState(0);
+  const [days, setDays] = useState<ReturnType<typeof weekDays>['days']>([]);
 
   useEffect(() => {
     setCountyZh(loadSettings().region?.countyZh);
+    const wk = weekDays();
+    setDays(wk.days);
+    setSel(wk.todayIdx);
     setReady(true);
   }, []);
 
-  if (!ready) return null;
+  if (!ready || days.length === 0) return null;
 
+  const wd = locale === 'en' ? WD_EN : WD_ZH;
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
   const city = menusForCounty(countyZh);
+  const weekend = days[sel]?.weekend;
 
   const pill = (
     <Link
-      href="/me"
+      href="/region"
       className="inline-flex items-center gap-1.5 self-start rounded-full border border-border bg-surface px-3 py-2 font-bold shadow-sm"
     >
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
@@ -38,16 +61,57 @@ export default function TodayClient() {
     </Link>
   );
 
+  const dateRow = (
+    <div className="flex gap-1.5 overflow-x-auto pb-0.5">
+      {days.map((d) => {
+        const active = d.idx === sel;
+        return (
+          <button
+            key={d.idx}
+            type="button"
+            aria-pressed={active}
+            onClick={() => setSel(d.idx)}
+            className={`flex min-h-[58px] min-w-[48px] flex-none flex-col items-center justify-center gap-0.5 rounded-xl border text-xs ${
+              active ? 'border-primary bg-primary text-white' : 'border-border bg-surface text-muted'
+            }`}
+          >
+            <span>{wd[d.idx]}</span>
+            <b className={`text-lg tabular-nums ${active ? 'text-white' : 'text-ink'}`}>{d.date}</b>
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const seasonShortcut = (
+    <Link href="/in-season" className="card flex items-center justify-between p-4">
+      <span className="font-bold">{t('toSeason')}</span>
+      <span className="text-muted">›</span>
+    </Link>
+  );
+
   if (!city) {
     return (
       <div className="flex flex-col gap-3">
         {pill}
-        <div className="card p-6 text-center text-muted">
-          {t('cityOnly')}{' '}
-          <Link href="/me" className="font-bold text-primary">
-            {t('changeCity')}
-          </Link>
+        {dateRow}
+        <Link href="/region" className="card block p-6 text-center text-muted">
+          {t('cityOnly')} <span className="font-bold text-primary">{t('changeCity')}</span>
+        </Link>
+      </div>
+    );
+  }
+
+  if (weekend) {
+    return (
+      <div className="flex flex-col gap-3">
+        {pill}
+        {dateRow}
+        <div className="card p-4">
+          <div className="eyebrow">{t('noSchool')}</div>
+          <p className="mt-2 text-muted">{t('noSchoolBody')}</p>
         </div>
+        {seasonShortcut}
       </div>
     );
   }
@@ -55,6 +119,7 @@ export default function TodayClient() {
   return (
     <div className="flex flex-col gap-3">
       {pill}
+      {dateRow}
 
       <div className="card overflow-hidden">
         <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
@@ -77,6 +142,8 @@ export default function TodayClient() {
           </div>
         </div>
       </div>
+
+      {seasonShortcut}
 
       <h2 className="text-lg font-extrabold">{t('nearby')}</h2>
       <div className="card p-4">

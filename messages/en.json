@@ -17,7 +17,10 @@
     "nearby": "Nearby school lunches",
     "schoolMenu": "school lunch",
     "cityOnly": "School-lunch sample covers Taipei, Taichung, Tainan and Kaohsiung.",
-    "changeCity": "Choose a city in Me"
+    "changeCity": "Choose a city",
+    "toSeason": "See what's in season",
+    "noSchool": "No school lunch on weekends",
+    "noSchoolBody": "Here's what's in season instead. Menus return on weekdays."
   },
   "inSeason": {
     "title": "In Season",
