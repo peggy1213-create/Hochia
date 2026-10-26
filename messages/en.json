@@ -40,7 +40,17 @@
   "thisWeek": {
     "title": "This Week",
     "intro": "The ingredients most schools are using this week, filterable by food group.",
-    "comingSoon": "The ranking connects to the School Catering platform data."
+    "heroEyebrow": "Most-used by schools this week",
+    "ranked": "This week, ranked",
+    "note": "From {county} junior & elementary schools, 2025/05/12–16; food group is estimated.",
+    "atSchools": "Used by {n} schools",
+    "inSeason": "In season",
+    "inSeasonNow": "In season now",
+    "groupAll": "All",
+    "groupVeg": "Vegetable",
+    "groupPro": "Protein",
+    "groupGrain": "Grain",
+    "cityOnly": "This-week sample covers Taipei, Taichung, Tainan and Kaohsiung. Choose a city in Me."
   },
   "me": {
     "title": "Me",

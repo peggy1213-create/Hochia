@@ -40,7 +40,17 @@
   "thisWeek": {
     "title": "本週食材",
     "intro": "本週最多學校使用的食材排行，可依食材分組篩選。",
-    "comingSoon": "食材排行將接入校園食材登錄平臺資料。"
+    "heroEyebrow": "本週最多學校使用",
+    "ranked": "本週食材排行",
+    "note": "統計自 {county} 國中小 2025/05/12–16；食材分組為推估。",
+    "atSchools": "{n} 所學校使用",
+    "inSeason": "盛產",
+    "inSeasonNow": "現正盛產",
+    "groupAll": "全部",
+    "groupVeg": "蔬菜",
+    "groupPro": "豆魚蛋肉",
+    "groupGrain": "全榖雜糧",
+    "cityOnly": "本週食材示範資料僅含臺北、臺中、臺南、高雄。到「我的」選擇縣市。"
   },
   "me": {
     "title": "我的",
