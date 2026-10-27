@@ -73,7 +73,7 @@ export default function TodayClient() {
   const pill = (
     <Link
       href="/region"
-      className="inline-flex items-center gap-1.5 self-start rounded-full border border-border bg-surface px-3 py-2 font-bold shadow-sm"
+      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-2 font-bold shadow-sm"
     >
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
         <path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z" strokeLinejoin="round" />
@@ -84,8 +84,9 @@ export default function TodayClient() {
     </Link>
   );
 
-  const calendar = (
-    <div className="flex items-center gap-2">
+  const topBar = (
+    <div className="flex flex-wrap items-center gap-2">
+      {pill}
       <label className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 font-bold text-ink">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
           <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -96,7 +97,7 @@ export default function TodayClient() {
           value={iso}
           onChange={(e) => e.target.value && setIso(e.target.value)}
           aria-label={t('pickDate')}
-          className="bg-transparent font-bold text-ink outline-none"
+          className="w-[8.5rem] bg-transparent font-bold text-ink outline-none"
         />
       </label>
       <span className="rounded-full bg-tint px-2.5 py-1 text-sm font-semibold">{wd[wdIdx]}</span>
@@ -194,8 +195,7 @@ export default function TodayClient() {
 
   return (
     <div className="flex flex-col gap-3">
-      {pill}
-      {calendar}
+      {topBar}
       {body}
     </div>
   );
