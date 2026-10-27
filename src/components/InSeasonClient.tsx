@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { loadSettings } from '@/lib/userStore';
+import { loadSettings, saveSettings } from '@/lib/userStore';
 import { findCounty } from '@/lib/regions';
 import { monthRange, type Crop, type FoodGroup } from '@/lib/moa';
+import RegionGrid from './RegionGrid';
 
 const GROUPS: Array<'all' | FoodGroup> = ['all', 'fruit', 'veg', 'grain'];
 const GROUP_KEY: Record<string, 'groupAll' | 'groupFruit' | 'groupVeg' | 'groupGrain'> = {
@@ -17,10 +18,12 @@ const GROUP_KEY: Record<string, 'groupAll' | 'groupFruit' | 'groupVeg' | 'groupG
 
 export default function InSeasonClient({ crops, month }: { crops: Crop[]; month: number }) {
   const t = useTranslations('inSeason');
+  const tr = useTranslations('region');
   const locale = useLocale();
   const [countyZh, setCountyZh] = useState<string | undefined>(undefined);
   const [scope, setScope] = useState<'local' | 'all'>('local');
   const [group, setGroup] = useState<'all' | FoodGroup>('all');
+  const [picking, setPicking] = useState(false);
 
   useEffect(() => {
     setCountyZh(loadSettings().region?.countyZh);
@@ -28,6 +31,16 @@ export default function InSeasonClient({ crops, month }: { crops: Crop[]; month:
 
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
+
+  const chooseCounty = (zh: string) => {
+    setCountyZh(zh);
+    saveSettings({
+      ...loadSettings(),
+      region: { countyZh: zh, districtZh: findCounty(zh)?.districts?.[0]?.zh },
+    });
+    setScope('local');
+    setPicking(false);
+  };
 
   const { items, widened } = useMemo(() => {
     let list = crops;
@@ -47,6 +60,26 @@ export default function InSeasonClient({ crops, month }: { crops: Crop[]; month:
     <>
       <h1 className="text-xl font-extrabold text-balance">{t('titleMonth', { month })}</h1>
       <p className="text-muted">{t('intro')}</p>
+
+      <button
+        type="button"
+        onClick={() => setPicking((p) => !p)}
+        className="inline-flex items-center gap-1.5 self-start rounded-full border border-border bg-surface px-3 py-2 font-bold shadow-sm"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
+          <path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z" strokeLinejoin="round" />
+          <circle cx="12" cy="11" r="2.2" />
+        </svg>
+        {countyName || tr('pickTitle')}
+        <span className="text-muted">{tr('change')}</span>
+      </button>
+
+      {picking && (
+        <div className="card p-4">
+          <div className="eyebrow mb-3">{tr('pickTitle')}</div>
+          <RegionGrid valueZh={countyZh} onSelect={chooseCounty} />
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-2">
         <button className="chip" aria-pressed={scope === 'local'} onClick={() => setScope('local')}>
