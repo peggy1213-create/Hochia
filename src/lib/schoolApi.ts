@@ -206,3 +206,26 @@ export async function menuForDate(countyZh: string, iso: string): Promise<DayMen
   if (!data) return null;
   return data[`${y}/${m}/${d}`] ?? null;
 }
+
+/** The most recent available menu on or before today (checks the last few months). */
+export async function latestMenu(
+  countyZh: string,
+): Promise<{ date: string; menu: DayMenu } | null> {
+  if (!countyZh) return null;
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const todayKey = `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())}`;
+  for (let off = 0; off >= -2; off--) {
+    const d = new Date(now.getFullYear(), now.getMonth() + off, 1);
+    const data = await getMonthMenus(countyZh, String(d.getFullYear()), pad(d.getMonth() + 1));
+    if (!data) continue;
+    const avail = Object.keys(data)
+      .filter((k) => k <= todayKey) // 'YYYY/MM/DD' sorts lexicographically
+      .sort();
+    if (avail.length) {
+      const key = avail[avail.length - 1];
+      return { date: key.replace(/\//g, '-'), menu: data[key] };
+    }
+  }
+  return null;
+}

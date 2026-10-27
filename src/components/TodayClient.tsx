@@ -19,6 +19,9 @@ const WD_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 function toIso(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
+function isWeekend(iso: string) {
+  return iso ? (new Date(iso + 'T00:00:00').getDay() + 6) % 7 >= 5 : false;
+}
 
 export default function TodayClient() {
   const t = useTranslations('today');
@@ -28,28 +31,48 @@ export default function TodayClient() {
   const [ready, setReady] = useState(false);
   const [iso, setIso] = useState('');
   const [menu, setMenu] = useState<DayMenu | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [q, setQ] = useState('');
 
+  // On load: open on the most recent available menu (not necessarily today).
   useEffect(() => {
     const s = loadSettings();
-    setCountyZh(s.region?.countyZh);
+    const c = s.region?.countyZh;
+    setCountyZh(c);
     setMySchool(s.school);
-    setIso(toIso(new Date()));
     setReady(true);
+    setIso(toIso(new Date()));
+    if (!c) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    fetch(`/api/menu?county=${encodeURIComponent(c)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        setMenu((d.menu as DayMenu) ?? null);
+        if (d.date) setIso(d.date);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const wdIdx = iso ? (new Date(iso + 'T00:00:00').getDay() + 6) % 7 : 0;
-  const weekend = wdIdx >= 5;
-
-  useEffect(() => {
-    if (!ready || !countyZh || !iso || weekend) {
+  function pickDate(v: string) {
+    setIso(v);
+    if (isWeekend(v) || !countyZh) {
       setMenu(null);
       return;
     }
     let cancelled = false;
     setLoading(true);
-    fetch(`/api/menu?county=${encodeURIComponent(countyZh)}&date=${iso}`)
+    fetch(`/api/menu?county=${encodeURIComponent(countyZh)}&date=${v}`)
       .then((r) => r.json())
       .then((d) => {
         if (!cancelled) {
@@ -63,13 +86,12 @@ export default function TodayClient() {
           setLoading(false);
         }
       });
-    return () => {
-      cancelled = true;
-    };
-  }, [ready, countyZh, iso, weekend]);
+  }
 
-  if (!ready || !iso) return null;
+  if (!ready) return null;
 
+  const wdIdx = iso ? (new Date(iso + 'T00:00:00').getDay() + 6) % 7 : 0;
+  const weekend = isWeekend(iso);
   const wd = locale === 'en' ? WD_EN : WD_ZH;
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
@@ -104,7 +126,7 @@ export default function TodayClient() {
         <input
           type="date"
           value={iso}
-          onChange={(e) => e.target.value && setIso(e.target.value)}
+          onChange={(e) => e.target.value && pickDate(e.target.value)}
           aria-label={t('pickDate')}
           className="w-[8.5rem] bg-transparent font-bold text-ink outline-none"
         />
@@ -156,6 +178,8 @@ export default function TodayClient() {
         {t('noRegion')} <span className="font-bold text-primary">{t('changeCity')}</span>
       </Link>
     );
+  } else if (loading) {
+    body = <div className="card p-6 text-center text-muted">{t('loading')}</div>;
   } else if (weekend) {
     body = (
       <>
@@ -166,8 +190,6 @@ export default function TodayClient() {
         {seasonShortcut}
       </>
     );
-  } else if (loading) {
-    body = <div className="card p-6 text-center text-muted">{t('loading')}</div>;
   } else if (!menu) {
     body = (
       <>
