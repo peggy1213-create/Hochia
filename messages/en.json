@@ -24,7 +24,7 @@
     "pickDate": "Choose a date",
     "noRegion": "Choose a city to see nearby school lunches.",
     "loading": "Loading…",
-    "noMenu": "No menu for this date yet — try another date or see what's in season."
+    "noMenu": "No school lunch this day (a holiday, or data not published yet). Try another date, or see what's in season."
   },
   "inSeason": {
     "title": "In Season",
