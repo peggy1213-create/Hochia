@@ -13,9 +13,6 @@ type DayMenu = {
   schools: { name: string; district: string; menu: string[] }[];
 };
 
-const WD_ZH = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
-const WD_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
 function toIso(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
@@ -88,11 +85,16 @@ export default function TodayClient() {
       });
   }
 
+  function shiftDay(delta: number) {
+    if (!iso) return;
+    const d = new Date(iso + 'T00:00:00');
+    d.setDate(d.getDate() + delta);
+    pickDate(toIso(d));
+  }
+
   if (!ready) return null;
 
-  const wdIdx = iso ? (new Date(iso + 'T00:00:00').getDay() + 6) % 7 : 0;
   const weekend = isWeekend(iso);
-  const wd = locale === 'en' ? WD_EN : WD_ZH;
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
 
@@ -118,20 +120,38 @@ export default function TodayClient() {
   const topBar = (
     <div className="flex flex-wrap items-center gap-2">
       {pill}
-      <label className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 font-bold text-ink">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
-          <rect x="3" y="5" width="18" height="16" rx="2" />
-          <path d="M3 9h18M8 3v4M16 3v4" />
-        </svg>
-        <input
-          type="date"
-          value={iso}
-          onChange={(e) => e.target.value && pickDate(e.target.value)}
-          aria-label={t('pickDate')}
-          className="w-[8.5rem] bg-transparent font-bold text-ink outline-none"
-        />
-      </label>
-      <span className="rounded-full bg-tint px-2.5 py-1 text-sm font-semibold">{wd[wdIdx]}</span>
+      <div className="flex items-center gap-1.5">
+        <button
+          type="button"
+          aria-label={t('prevDay')}
+          onClick={() => shiftDay(-1)}
+          className="flex h-11 w-9 flex-none items-center justify-center rounded-xl border border-border bg-surface text-lg font-bold text-primary"
+        >
+          ‹
+        </button>
+        <label className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 font-bold text-ink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] text-primary">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M3 9h18M8 3v4M16 3v4" />
+          </svg>
+          <input
+            type="date"
+            value={iso}
+            onChange={(e) => e.target.value && pickDate(e.target.value)}
+            aria-label={t('pickDate')}
+            className="w-[8.5rem] bg-transparent font-bold text-ink outline-none"
+          />
+        </label>
+        <button
+          type="button"
+          aria-label={t('nextDay')}
+          disabled={iso >= toIso(new Date())}
+          onClick={() => shiftDay(1)}
+          className="flex h-11 w-9 flex-none items-center justify-center rounded-xl border border-border bg-surface text-lg font-bold text-primary disabled:text-border"
+        >
+          ›
+        </button>
+      </div>
     </div>
   );
 

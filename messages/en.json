@@ -25,6 +25,8 @@
     "noSchool": "No school lunch on weekends",
     "noSchoolBody": "Here's what's in season instead. Menus return on weekdays.",
     "pickDate": "Choose a date",
+    "prevDay": "Previous day",
+    "nextDay": "Next day",
     "noRegion": "Choose a city to see nearby school lunches.",
     "loading": "Loading…",
     "noMenu": "No school lunch this day (a holiday, or data not published yet). Try another date, or see what's in season."
