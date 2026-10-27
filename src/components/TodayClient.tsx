@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { loadSettings } from '@/lib/userStore';
+import { loadSettings, saveSettings } from '@/lib/userStore';
 import { findCounty } from '@/lib/regions';
 
 type DayMenu = {
@@ -24,13 +24,17 @@ export default function TodayClient() {
   const t = useTranslations('today');
   const locale = useLocale();
   const [countyZh, setCountyZh] = useState<string | undefined>(undefined);
+  const [mySchool, setMySchool] = useState<string | undefined>(undefined);
   const [ready, setReady] = useState(false);
   const [iso, setIso] = useState('');
   const [menu, setMenu] = useState<DayMenu | null>(null);
   const [loading, setLoading] = useState(false);
+  const [q, setQ] = useState('');
 
   useEffect(() => {
-    setCountyZh(loadSettings().region?.countyZh);
+    const s = loadSettings();
+    setCountyZh(s.region?.countyZh);
+    setMySchool(s.school);
     setIso(toIso(new Date()));
     setReady(true);
   }, []);
@@ -69,6 +73,11 @@ export default function TodayClient() {
   const wd = locale === 'en' ? WD_EN : WD_ZH;
   const county = findCounty(countyZh);
   const countyName = county ? (locale === 'en' ? county.en : county.zh) : '';
+
+  const selectSchool = (name: string) => {
+    setMySchool(name);
+    saveSettings({ ...loadSettings(), school: name });
+  };
 
   const pill = (
     <Link
@@ -111,6 +120,35 @@ export default function TodayClient() {
     </Link>
   );
 
+  const schoolRow = (s: DayMenu['schools'][number]) => (
+    <li key={s.name}>
+      <Link
+        href={`/school/${encodeURIComponent(countyZh!)}/${iso}/${encodeURIComponent(s.name)}`}
+        onClick={() => selectSchool(s.name)}
+        className="flex items-center gap-3 py-3.5"
+      >
+        <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-tint text-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5" strokeLinejoin="round">
+            <path d="M3 10l9-5 9 5-9 5Z" />
+            <path d="M7 12v5c0 1 2 2 5 2s5-1 5-2v-5" />
+          </svg>
+        </span>
+        <span className="min-w-0 flex-1">
+          <b className="block">
+            {s.name}
+            {s.name === mySchool && (
+              <span className="ml-1.5 rounded bg-primary px-1.5 py-0.5 text-[10px] font-bold text-white">
+                {t('selected')}
+              </span>
+            )}
+          </b>
+          <span className="text-sm text-muted">{s.district}</span>
+        </span>
+        <span className="flex-none text-muted">›</span>
+      </Link>
+    </li>
+  );
+
   let body: React.ReactNode;
   if (!countyZh) {
     body = (
@@ -138,6 +176,15 @@ export default function TodayClient() {
       </>
     );
   } else {
+    const term = q.trim();
+    let list = menu.schools;
+    if (term) list = list.filter((s) => s.name.includes(term));
+    if (mySchool) {
+      const sel = list.filter((s) => s.name === mySchool);
+      const rest = list.filter((s) => s.name !== mySchool);
+      list = [...sel, ...rest];
+    }
+
     body = (
       <>
         <div className="card overflow-hidden">
@@ -165,29 +212,20 @@ export default function TodayClient() {
         {seasonShortcut}
 
         <h2 className="text-lg font-extrabold">{t('nearby')}</h2>
+        <input
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={t('searchSchool')}
+          aria-label={t('searchSchool')}
+          className="rounded-xl border border-border bg-surface px-3 py-2.5 font-medium text-ink outline-none placeholder:text-muted"
+        />
         <div className="card p-4">
-          <ul className="flex flex-col divide-y divide-border">
-            {menu.schools.map((s, i) => (
-              <li key={i}>
-                <Link
-                  href={`/school/${encodeURIComponent(countyZh)}/${iso}/${i}`}
-                  className="flex items-center gap-3 py-3.5"
-                >
-                  <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-tint text-primary">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5" strokeLinejoin="round">
-                      <path d="M3 10l9-5 9 5-9 5Z" />
-                      <path d="M7 12v5c0 1 2 2 5 2s5-1 5-2v-5" />
-                    </svg>
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <b className="block">{s.name}</b>
-                    <span className="text-sm text-muted">{s.district}</span>
-                  </span>
-                  <span className="flex-none text-muted">›</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {list.length === 0 ? (
+            <p className="py-4 text-center text-muted">{t('noSchoolFound')}</p>
+          ) : (
+            <ul className="flex flex-col divide-y divide-border">{list.map(schoolRow)}</ul>
+          )}
         </div>
       </>
     );

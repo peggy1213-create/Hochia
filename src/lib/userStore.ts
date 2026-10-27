@@ -6,6 +6,7 @@ export type Region = { countyZh: string; districtZh?: string };
 
 export type UserSettings = {
   region?: Region;
+  school?: string;
   servings: number;
   diet: string[];
   setupDone: boolean;

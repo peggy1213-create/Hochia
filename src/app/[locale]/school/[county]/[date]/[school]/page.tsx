@@ -6,13 +6,14 @@ import { menuForDate } from '@/lib/schoolApi';
 export default async function SchoolPage({
   params,
 }: {
-  params: { locale: string; county: string; date: string; idx: string };
+  params: { locale: string; county: string; date: string; school: string };
 }) {
   setRequestLocale(params.locale);
   const t = await getTranslations('today');
   const county = decodeURIComponent(params.county);
+  const schoolName = decodeURIComponent(params.school);
   const menu = await menuForDate(county, params.date);
-  const school = menu?.schools[Number(params.idx)];
+  const school = menu?.schools.find((s) => s.name === schoolName);
   if (!menu || !school) notFound();
 
   return (

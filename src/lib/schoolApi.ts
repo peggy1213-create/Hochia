@@ -10,7 +10,7 @@ const BASE = 'https://fatraceschool.k12ea.gov.tw/cateringservice/openapi';
 const UA = 'Hochia/0.1';
 const DATASET = '午餐菜色及食材資料集';
 const GRADE = '國中小';
-const MAX_SCHOOLS = 12;
+const MAX_SCHOOLS = 60;
 
 export type Ingredient = { name: string; cert: string | null };
 export type SchoolDish = { cat: string; ings: Ingredient[] };
@@ -156,7 +156,7 @@ const getMonthMenus = unstable_cache(
         dd.dishes.set(dish, dc);
       }
       const ing = (iIng >= 0 ? row[iIng] || '' : '').trim();
-      if (ing && !dc.seen.has(ing) && dc.ings.length < 10) {
+      if (ing && !dc.seen.has(ing) && dc.ings.length < 6) {
         dc.seen.add(ing);
         dc.ings.push({ name: ing, cert: (iCert >= 0 ? row[iCert] || '' : '').trim() || null });
       }
